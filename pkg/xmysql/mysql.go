@@ -1,4 +1,4 @@
-package mysql
+package xmysql
 
 import (
 	"sync"
