@@ -1,0 +1,62 @@
+definitions:
+  handler.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: 网关HTTP服务
+  license: {}
+  title: go-scaffold/
+  version: 1.0.0
+paths:
+  /api/app:
+    get:
+      responses:
+        "200":
+          description: 返回结果：{code:2000,message:"Success",data:nil}
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: Hello Word
+      tags:
+      - App
+  /api/login:
+    post:
+      description: 服务描述
+      parameters:
+      - description: 用户名
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: 密码
+        in: formData
+        name: password
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 返回结果：{code:2000,message:"Success",data:nil}
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: 登录
+      tags:
+      - 授权
+  /api/logout:
+    get:
+      responses:
+        "200":
+          description: 返回结果：{code:2000,message:"Success",data:nil}
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: 登出
+      tags:
+      - 授权
+schemes:
+- http
+swagger: "2.0"

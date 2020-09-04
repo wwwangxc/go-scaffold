@@ -1,2 +1,3 @@
-# go-scaffold
-golang web 脚手架
+# go-scaffold/
+
+https://github.com/etcd-io/etcd/pull/11564/files

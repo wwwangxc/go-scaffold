@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package pb;
+
+service Ping{
+  rpc Ping (PingRequest) returns (PingResponse){}
+}
+
+message PingRequest{
+}
+
+message PingResponse{
+  string message = 1;
+}

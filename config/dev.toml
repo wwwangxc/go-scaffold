@@ -1,0 +1,45 @@
+[app]
+    machine_id = 1  # 机器id
+
+    [app.http]
+        mode = "debug"  # 运行模式
+        port = 8080     # 端口
+        shutdown_timeout = 5 # 关机等待时长（秒）
+
+    [app.grpc]
+        network = "tcp"
+        addr = "127.0.0.1:3000"
+        scheme = "scaffold"
+        name = "ping"
+
+        [app.grpc.register.etcd]
+            endpoints = ["127.0.0.1:2379"]
+            ttl = 5
+
+    [app.mysql]
+        dsn = "root:root@tcp(127.0.0.1:3306)/gateway?charset=utf8&parseTime=True&loc=Local"
+
+    [app.redis]
+        addr = "127.0.0.1:6379"
+        password = ""
+        db = 0
+
+    [app.log]
+        dir = "."
+        name = "http.log"
+        level = "info"
+        debug = true
+        max_size = 100
+        max_age = 5
+        max_backups = 7
+        compress = false
+
+[grpc.resolver.etcd]
+    scheme = "scaffold"
+    endpoints = ["127.0.0.1:2379"]
+    ttl = 5
+
+[grpc.ping]
+    address = "scaffold:///ping"
+    balancer_name = "round_robin"
+    timeout = 5

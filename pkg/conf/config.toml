@@ -1,0 +1,20 @@
+[application]
+    machine_id = 1  # 机器id
+
+    [application.http]
+        mode = "debug"  # 运行模式
+        port = 8080     # 端口
+        shutdown_timeout = 5 # 关机等待时长（秒）
+
+    [application.database]
+        [application.database.mysql]
+            dsn = "root:root@tcp(127.0.0.1:3306)/gateway?charset=utf8&parseTime=True&loc=Local"
+    
+    [application.log]
+        level = "info"
+        debug = true
+        file_name = "./logs/http.log"
+        max_size = 100
+        max_age = 5
+        max_backups = 7
+        compress = false
