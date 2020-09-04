@@ -3,19 +3,13 @@ package xgorm
 import (
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/jinzhu/gorm"
 )
 
 // ConfigHandler ..
 type ConfigHandler interface {
-	GetInt(key string) int
-	GetInt32(key string) int32
-	GetInt64(key string) int64
 	GetString(key string) string
-	GetBool(key string) bool
-	GetTime(key string) time.Time
 }
 
 // RawConfig ..
