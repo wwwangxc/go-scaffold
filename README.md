@@ -24,6 +24,7 @@
 ├── pkg                   # 封装的第三方库及工具
 │   ├── conf              # 配置文件
 │   ├── etcd              # etcd解释器及注册机
+│   ├── jwt               # jwt
 │   ├── log               # 日志
 │   ├── util              # 工具
 │   ├── xgin              # gin
