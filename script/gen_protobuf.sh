@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# 生成 go-scaffold/internal/grpc/pb目录下的所有protobuf契约文件
+
 # 项目目录
 PROJ_DIR=$(dirname "$PWD")
 
