@@ -5,7 +5,7 @@
 # 目标文件夹：./target/grpc
 
 # 项目目录
-PROJ_DIR=$(dirname "$PWD")
+PROJ_DIR=$(dirname $(dirname $0))
 
 # 生成的目标目录
 TARGET_DIR=${PROJ_DIR}/target/grpc
