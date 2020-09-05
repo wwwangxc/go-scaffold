@@ -2,7 +2,6 @@ package xgin
 
 import (
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,11 +9,16 @@ import (
 // ConfigHandler ..
 type ConfigHandler interface {
 	GetInt(key string) int
-	GetInt32(key string) int32
-	GetInt64(key string) int64
 	GetString(key string) string
-	GetBool(key string) bool
-	GetTime(key string) time.Time
+}
+
+// Config ..
+type Config struct {
+	Mode            string
+	Port            int
+	ShutdownTimeout int
+
+	fns []func(*gin.Engine)
 }
 
 // DefaultConfig ..
@@ -36,15 +40,6 @@ func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
 		Port:            confHandler.GetInt(confPrefix + ".port"),
 		ShutdownTimeout: confHandler.GetInt(confPrefix + ".shutdown_timeout"),
 	}
-}
-
-// Config ..
-type Config struct {
-	Mode            string
-	Port            int
-	ShutdownTimeout int
-
-	fns []func(*gin.Engine)
 }
 
 // Setup ..

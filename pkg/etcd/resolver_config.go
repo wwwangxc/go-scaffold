@@ -6,6 +6,13 @@ import (
 	"google.golang.org/grpc/resolver"
 )
 
+// ResolverConfig ..
+type ResolverConfig struct {
+	Endpoints []string
+	TTL       int64
+	Scheme    string
+}
+
 // RawResolverConfig ..
 func RawResolverConfig(confPrefix string, confHandler ConfigHandler) *ResolverConfig {
 	if strings.HasSuffix(confPrefix, ".") {
@@ -18,13 +25,7 @@ func RawResolverConfig(confPrefix string, confHandler ConfigHandler) *ResolverCo
 	}
 }
 
-// ResolverConfig ..
-type ResolverConfig struct {
-	Endpoints []string
-	TTL       int64
-	Scheme    string
-}
-
+// Build ..
 func (t *ResolverConfig) Build() (resolver.Builder, error) {
 	return newResolver(t)
 }

@@ -19,7 +19,7 @@ func (t *Client) Close() error {
 	return t.cli.Close()
 }
 
-/////////////////////////////////////////////////////////////////////// Redis Commands String
+// -------------------------------------------------------------------------------- Redis Commands String
 
 // Get ->
 // Redis `GET key` command.
@@ -37,7 +37,7 @@ func (t *Client) Set(key string, value interface{}, expire time.Duration) bool {
 	return t.cli.Set(key, value, expire).Err() == redis.Nil
 }
 
-/////////////////////////////////////////////////////////////////////// Redis Commands Hash
+// -------------------------------------------------------------------------------- Redis Commands Hash
 
 // HMSet ->
 // Redis `HMSet` `Expire` command with pipeline.

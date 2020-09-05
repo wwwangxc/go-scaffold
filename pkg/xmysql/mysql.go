@@ -9,13 +9,14 @@ import (
 
 var (
 	// Cli mysql client
-	Cli       *sqlx.DB
-	initOnce  sync.Once
-	closeOnce sync.Once
+	Cli *sqlx.DB
+
+	_initOnce  sync.Once
+	_closeOnce sync.Once
 )
 
 func initialize(conf *Config) {
-	initOnce.Do(func() {
+	_initOnce.Do(func() {
 		Cli = newClient(conf)
 	})
 }
@@ -34,7 +35,7 @@ func Close() error {
 		return nil
 	}
 	var err error
-	closeOnce.Do(func() {
+	_closeOnce.Do(func() {
 		err = Cli.Close()
 	})
 	return err

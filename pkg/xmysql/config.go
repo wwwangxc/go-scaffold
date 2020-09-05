@@ -11,6 +11,11 @@ type ConfigHandler interface {
 	GetString(key string) string
 }
 
+// Config ..
+type Config struct {
+	DSN string
+}
+
 // RawConfig ..
 func RawConfig(confPath string, confHandler ConfigHandler) *Config {
 	if strings.HasSuffix(confPath, ",") {
@@ -19,11 +24,6 @@ func RawConfig(confPath string, confHandler ConfigHandler) *Config {
 	return &Config{
 		DSN: confHandler.GetString(confPath + ".dsn"),
 	}
-}
-
-// Config ..
-type Config struct {
-	DSN string
 }
 
 // Init ..

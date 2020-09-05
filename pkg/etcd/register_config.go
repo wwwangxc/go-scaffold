@@ -12,7 +12,13 @@ type ConfigHandler interface {
 	GetString(key string) string
 }
 
-// RawConfig ..
+// RegisterConfig ..
+type RegisterConfig struct {
+	Endpoints []string
+	TTL       int64
+}
+
+// RawRegisterConfig ..
 func RawRegisterConfig(confPrefix string, confHandler ConfigHandler) *RegisterConfig {
 	if strings.HasSuffix(confPrefix, ".") {
 		confPrefix = confPrefix[:len(confPrefix)-1]
@@ -21,12 +27,6 @@ func RawRegisterConfig(confPrefix string, confHandler ConfigHandler) *RegisterCo
 		Endpoints: confHandler.GetStringSlice(confPrefix + ".endpoints"),
 		TTL:       conf.GetInt64(confPrefix + ".ttl"),
 	}
-}
-
-// RegisterConfig ..
-type RegisterConfig struct {
-	Endpoints []string
-	TTL       int64
 }
 
 // Build ..

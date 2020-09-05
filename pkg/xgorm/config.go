@@ -7,9 +7,16 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+var _initOnce sync.Once
+
 // ConfigHandler ..
 type ConfigHandler interface {
 	GetString(key string) string
+}
+
+// Config ..
+type Config struct {
+	DSN string
 }
 
 // RawConfig ..
@@ -22,16 +29,9 @@ func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
 	}
 }
 
-var initOnce sync.Once
-
-// Config ..
-type Config struct {
-	DSN string
-}
-
 // Init ..
 func (t *Config) Init() {
-	initOnce.Do(func() {
+	_initOnce.Do(func() {
 		initialize(t)
 	})
 }

@@ -8,6 +8,12 @@ import (
 	"github.com/coreos/etcd/clientv3"
 )
 
+// Register ..
+type Register struct {
+	cli  *clientv3.Client
+	conf *RegisterConfig
+}
+
 func newRegister(conf *RegisterConfig) *Register {
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:   conf.Endpoints,
@@ -20,12 +26,6 @@ func newRegister(conf *RegisterConfig) *Register {
 		conf: conf,
 		cli:  cli,
 	}
-}
-
-// Register ..
-type Register struct {
-	cli  *clientv3.Client
-	conf *RegisterConfig
 }
 
 // RegistryService ..

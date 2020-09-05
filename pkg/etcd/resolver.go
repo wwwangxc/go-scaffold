@@ -10,6 +10,13 @@ import (
 	"google.golang.org/grpc/resolver"
 )
 
+type etcdResolver struct {
+	conf *ResolverConfig
+	cli  *clientv3.Client
+
+	clientConn resolver.ClientConn
+}
+
 func newResolver(t *ResolverConfig) (resolver.Builder, error) {
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:   t.Endpoints,
@@ -22,13 +29,6 @@ func newResolver(t *ResolverConfig) (resolver.Builder, error) {
 		conf: t,
 		cli:  cli,
 	}, nil
-}
-
-type etcdResolver struct {
-	conf *ResolverConfig
-	cli  *clientv3.Client
-
-	clientConn resolver.ClientConn
 }
 
 func (t *etcdResolver) Build(target resolver.Target, cc resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {

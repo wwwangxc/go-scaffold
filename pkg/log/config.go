@@ -3,19 +3,29 @@ package log
 import (
 	"strings"
 	"sync"
-	"time"
 
 	"go.uber.org/zap"
 )
 
+var _initOnce sync.Once
+
 // ConfigHandler ..
 type ConfigHandler interface {
 	GetInt(key string) int
-	GetInt32(key string) int32
-	GetInt64(key string) int64
 	GetString(key string) string
 	GetBool(key string) bool
-	GetTime(key string) time.Time
+}
+
+// Config ..
+type Config struct {
+	Dir        string // 日志输出目录
+	Name       string // 日志文件名称
+	Level      string // 日志输出等级
+	MaxSize    int    // 日志文件大小，单位：MB
+	MaxAge     int    // 备份数量
+	MaxBackups int    // 备份时间，单位：天
+	Debug      bool   // 是否控制台输出dibug日志
+	Compress   bool   // 是否压缩日志
 }
 
 // DefaultConfig ..
@@ -49,23 +59,9 @@ func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
 	}
 }
 
-var initOnce sync.Once
-
-// Config ..
-type Config struct {
-	Dir        string // 日志输出目录
-	Name       string // 日志文件名称
-	Level      string // 日志输出等级
-	MaxSize    int    // 日志文件大小，单位：MB
-	MaxAge     int    // 备份数量
-	MaxBackups int    // 备份时间，单位：天
-	Debug      bool   // 是否控制台输出dibug日志
-	Compress   bool   // 是否压缩日志
-}
-
 // Init ..
 func (t *Config) Init() {
-	initOnce.Do(func() {
+	_initOnce.Do(func() {
 		initializa(t)
 		logger = zap.L()
 	})

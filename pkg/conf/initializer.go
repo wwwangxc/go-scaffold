@@ -13,14 +13,14 @@ import (
 )
 
 var (
-	confPath string
-	initOnce sync.Once
+	_confPath string
+	_initOnce sync.Once
 )
 
 // Init ..
 func Init() {
-	initOnce.Do(func() {
-		flag.StringVar(&confPath, "conf", "./config.toml", "default config path")
+	_initOnce.Do(func() {
+		flag.StringVar(&_confPath, "conf", "./config.toml", "default config path")
 		flag.Parse()
 		initialize()
 	})
@@ -44,13 +44,13 @@ func initialize() {
 }
 
 func parseConfigPath() (confName, confType, confDir string) {
-	lastIndex := strings.LastIndex(confPath, "/")
+	lastIndex := strings.LastIndex(_confPath, "/")
 	if lastIndex == -1 {
 		confDir = "./"
 	} else {
-		confDir = confPath[:lastIndex+1]
+		confDir = _confPath[:lastIndex+1]
 	}
-	tmp := strings.Split(confPath[lastIndex+1:], ".")
+	tmp := strings.Split(_confPath[lastIndex+1:], ".")
 	if len(tmp) < 2 {
 		panic(errors.New("wrong config").Error())
 	}

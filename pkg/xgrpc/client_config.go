@@ -8,7 +8,16 @@ import (
 	"google.golang.org/grpc/resolver"
 )
 
-// RawClientConfig
+// ClientConfig ..
+type ClientConfig struct {
+	Addr         string
+	BalancerName string
+	Timeout      int
+
+	resolver resolver.Builder
+}
+
+// RawClientConfig ..
 func RawClientConfig(confPrefix string, confHandler ConfigHandler) *ClientConfig {
 	if strings.HasSuffix(confPrefix, ".") {
 		confPrefix = confPrefix[:len(confPrefix)-1]
@@ -20,20 +29,13 @@ func RawClientConfig(confPrefix string, confHandler ConfigHandler) *ClientConfig
 	}
 }
 
-// ClientConfig ..
-type ClientConfig struct {
-	Addr         string
-	BalancerName string
-	Timeout      int
-
-	resolver resolver.Builder
-}
-
+// WithResolver ..
 func (t *ClientConfig) WithResolver(resolver resolver.Builder) *ClientConfig {
 	t.resolver = resolver
 	return t
 }
 
+// Build ..
 func (t *ClientConfig) Build() (*grpc.ClientConn, error) {
 	return newClient(t)
 }

@@ -11,6 +11,13 @@ import (
 	"google.golang.org/grpc"
 )
 
+// GrpcServer ..
+type GrpcServer struct {
+	ln   net.Listener
+	srv  *grpc.Server
+	conf *ServerConfig
+}
+
 func newServer(conf *ServerConfig) *GrpcServer {
 	ln, err := net.Listen(conf.Network, conf.Addr)
 	if err != nil {
@@ -25,13 +32,6 @@ func newServer(conf *ServerConfig) *GrpcServer {
 		srv:  srv,
 		conf: conf,
 	}
-}
-
-// GrpcServer ..
-type GrpcServer struct {
-	ln   net.Listener
-	srv  *grpc.Server
-	conf *ServerConfig
 }
 
 // Serve ..
@@ -52,7 +52,7 @@ func (t *GrpcServer) Serve() {
 	}
 }
 
-// Close..
+// Close ..
 func (t *GrpcServer) Close() {
 	defer t.ln.Close()
 	defer t.srv.GracefulStop()
