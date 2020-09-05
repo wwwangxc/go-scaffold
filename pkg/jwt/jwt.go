@@ -12,13 +12,14 @@ import (
 	"github.com/spf13/viper"
 )
 
+// global error
 var (
-	ErrNotInit = errors.New("gen jwt: 未初始化配置信息")
+	ErrNotInit = errors.New("gen jwt: need initialize")
 	ErrInvalid = errors.New("parse jwt: the token is invalid")
 )
 
 type claims struct {
-	Json []byte
+	json []byte
 	jwtgo.StandardClaims
 }
 
@@ -32,7 +33,7 @@ func Gen(obj interface{}) (string, error) {
 		return "", err
 	}
 	c := &claims{
-		Json: json,
+		json: json,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Duration(_config.TTL) * time.Minute).Unix(),
 			Issuer:    viper.GetString(_config.Issuer),
@@ -51,7 +52,7 @@ func Parse(token string, obj interface{}) error {
 	if err != nil {
 		return err
 	}
-	return json.Unmarshal(c.Json, obj)
+	return json.Unmarshal(c.json, obj)
 }
 
 // Expired ..
