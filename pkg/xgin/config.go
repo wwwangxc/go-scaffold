@@ -14,9 +14,9 @@ type ConfigHandler interface {
 
 // Config ..
 type Config struct {
-	Mode            string
-	Port            int
-	ShutdownTimeout int
+	Mode        string
+	Port        int
+	ShutdownTTL int
 
 	fns []func(*gin.Engine)
 }
@@ -24,9 +24,9 @@ type Config struct {
 // DefaultConfig ..
 func DefaultConfig() *Config {
 	return &Config{
-		Mode:            gin.DebugMode,
-		Port:            8080,
-		ShutdownTimeout: 5,
+		Mode:        gin.DebugMode,
+		Port:        8080,
+		ShutdownTTL: 5,
 	}
 }
 
@@ -36,9 +36,9 @@ func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
 		confPrefix = confPrefix[:len(confPrefix)-1]
 	}
 	return &Config{
-		Mode:            confHandler.GetString(confPrefix + ".mode"),
-		Port:            confHandler.GetInt(confPrefix + ".port"),
-		ShutdownTimeout: confHandler.GetInt(confPrefix + ".shutdown_timeout"),
+		Mode:        confHandler.GetString(confPrefix + ".mode"),
+		Port:        confHandler.GetInt(confPrefix + ".port"),
+		ShutdownTTL: confHandler.GetInt(confPrefix + ".shutdown_ttl"),
 	}
 }
 

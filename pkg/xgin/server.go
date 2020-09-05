@@ -30,7 +30,7 @@ func (t *HTTPServer) ListenAndServe() {
 	log.Info("Shutdown Server ...")
 	ctx, cancel := context.WithTimeout(
 		context.Background(),
-		time.Duration(t.conf.ShutdownTimeout)*time.Second)
+		time.Duration(t.conf.ShutdownTTL)*time.Second)
 	defer cancel()
 	if err := t.Shutdown(ctx); err != nil {
 		log.Fatal("Server Shutdown: ", zap.Error(err))

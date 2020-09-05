@@ -4,7 +4,10 @@
     [app.http]
         mode = "debug"  # 运行模式
         port = 8080     # 端口
-        shutdown_timeout = 5 # 关机等待时长（秒）
+        shutdown_ttl = 5 # 关机等待时长（单位：秒）
+        secret = '盐'
+        token_ttl = 15    # token有效时长（单位：分钟）
+        name = "http"
 
     [app.grpc]
         network = "tcp"
@@ -42,4 +45,4 @@
 [grpc.ping]
     address = "scaffold:///ping"
     balancer_name = "round_robin"
-    timeout = 5
+    ttl = 5

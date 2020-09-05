@@ -4,7 +4,6 @@ import (
 	"go-scaffold/internal/constant"
 	"go-scaffold/internal/model"
 	"go-scaffold/pkg/util"
-	"go-scaffold/pkg/uuid"
 	"go-scaffold/pkg/xredis"
 	"time"
 
@@ -27,7 +26,7 @@ func (t *AuthenticationService) Login(username string, password string) (string,
 		return "", errors.New("用户名或密码错误")
 	}
 
-	sessionID := uuid.Gen()
+	sessionID := util.GenUUID()
 	sessionKey := constant.RedisKeySession + sessionID
 	fields := map[string]interface{}{
 		"userID":   user.ID,

@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-	// fmt.Printf("processID: %d\n", os.Getppid())
 	conf.Init()                                             // 加载配置文件
 	log.RawConfig("app.log", conf.GetHandler()).Init()      // 加载日志
 	defer log.Sync()                                        // 日志落盘
