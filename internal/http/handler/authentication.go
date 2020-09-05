@@ -2,6 +2,7 @@ package handler
 
 import (
 	"go-scaffold/internal/service"
+	"go-scaffold/pkg/conf"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +24,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	http.SetCookie(ctx.Writer, &http.Cookie{
-		Name:     "gateway-sso",
+		Name:     conf.GetString("app.http.name"),
 		Value:    sessionID,
 		HttpOnly: true,
 		MaxAge:   15 * 60,
@@ -37,8 +38,9 @@ func Login(ctx *gin.Context) {
 // @Success 200 {object} handler.Response "返回结果：{code:2000,message:"Success",data:nil}"
 // @Router /api/logout [get]
 func Logout(ctx *gin.Context) {
-	sessionID, _ := ctx.Cookie("gateway-sso")
-	ctx.SetCookie("gateway-sso", "", -1, "", "", false, true)
+	issuer := conf.GetString("app.http.name")
+	sessionID, _ := ctx.Cookie(issuer)
+	ctx.SetCookie(issuer, "", -1, "", "", false, true)
 	service.Authentication.Logout(sessionID)
 	ResponseSuccess(ctx, nil)
 }
