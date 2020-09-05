@@ -1,6 +1,4 @@
-# go-scaffold/
-
-https://github.com/etcd-io/etcd/pull/11564/files
+# Golang 脚手架
 
 ### 目录结构
 
@@ -38,4 +36,7 @@ https://github.com/etcd-io/etcd/pull/11564/files
     ├── grpc              # grpc服务文件
     └── http              # http服务文件
 ```
+
+### 补充
+ `google.golang.org/grpc` 包与 `github.com/coreos/etcd`发生冲突时，参照：https://github.com/etcd-io/etcd/pull/11564/files
 
