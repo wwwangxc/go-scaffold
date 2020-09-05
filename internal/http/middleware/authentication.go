@@ -4,6 +4,7 @@ import (
 	"go-scaffold/internal/constant"
 	"go-scaffold/internal/http/handler"
 	"go-scaffold/internal/model"
+	"go-scaffold/pkg/conf"
 	"go-scaffold/pkg/xredis"
 	"strconv"
 
@@ -22,11 +23,12 @@ func UseAuthentication(engine *gin.Engine) {
 // Authentication 身份验证中间件
 func authentication(args ...string) gin.HandlerFunc {
 	ignoreFn := genIgnoreFunc(args...)
+	issuer := conf.GetString("app.http.name")
 	return func(ctx *gin.Context) {
 		if ignoreFn(ctx.FullPath()) {
 			return
 		}
-		sessionID, err := ctx.Cookie("gateway-sso")
+		sessionID, err := ctx.Cookie(issuer)
 		if err != nil || len(sessionID) == 0 {
 			handler.ResponseWithCode(ctx, constant.HTTPResponseCodeNotLogin)
 			ctx.Abort()
