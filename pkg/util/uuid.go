@@ -1,7 +1,8 @@
-package uuid
+package util
 
 import uuid "github.com/satori/go.uuid"
 
-func Gen() string {
+// GenUUID ..
+func GenUUID() string {
 	return uuid.NewV4().String()
 }
