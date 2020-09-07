@@ -19,8 +19,9 @@ var (
 )
 
 type claims struct {
-	Json []byte
 	jwtgo.StandardClaims
+
+	JSON []byte
 }
 
 // Gen ..
@@ -33,7 +34,7 @@ func Gen(obj interface{}) (string, error) {
 		return "", err
 	}
 	c := &claims{
-		Json: json,
+		JSON: json,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Duration(_config.TTL) * time.Minute).Unix(),
 			Issuer:    viper.GetString(_config.Issuer),
@@ -52,7 +53,7 @@ func Parse(token string, obj interface{}) error {
 	if err != nil {
 		return err
 	}
-	return json.Unmarshal(c.Json, obj)
+	return json.Unmarshal(c.JSON, obj)
 }
 
 // Expired ..

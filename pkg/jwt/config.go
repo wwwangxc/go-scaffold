@@ -29,6 +29,7 @@ func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
 
 var _config *Config
 
+// Init ..
 func (t *Config) Init() {
 	_config = t
 }
