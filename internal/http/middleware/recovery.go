@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"os"
-	"runtime/debug"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -50,7 +49,6 @@ func recovery(stack bool) gin.HandlerFunc {
 					log.Error("[Recovery from panic]",
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),
-						zap.String("stack", string(debug.Stack())),
 					)
 				} else {
 					log.Error("[Recovery from panic]",

@@ -1,6 +1,8 @@
 package log
 
-import "go.uber.org/zap"
+import (
+	"go.uber.org/zap"
+)
 
 var (
 	logger = DefaultConfig().Build()
@@ -28,7 +30,7 @@ func Warn(msg string, fields ...zap.Field) {
 
 // Error ..
 func Error(msg string, fields ...zap.Field) {
-	logger.Error(msg, fields...)
+	logger.Error(msg, append(fields, zap.Stack("stack"))...)
 }
 
 // Panic ..
