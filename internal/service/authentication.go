@@ -10,20 +10,26 @@ import (
 	"github.com/pkg/errors"
 )
 
+// global error
+var (
+	ErrInvalidUsernameOrPassword = errors.New("用户名或密码错误")
+	ErrAuthFailed                = errors.New("用户授权失败")
+)
+
 // AuthenticationService ..
 type AuthenticationService struct{}
 
 // Login ..
 func (t *AuthenticationService) Login(username string, password string) (string, error) {
 	if len(username) == 0 || len(password) == 0 {
-		return "", errors.New("用户名或密码错误")
+		return "", ErrInvalidUsernameOrPassword
 	}
 	user := &model.Admin{}
 	if err := user.GetByUsername(username); err != nil {
 		return "", err
 	}
 	if user.Password != util.WithSecret(password, user.Salt) {
-		return "", errors.New("用户名或密码错误")
+		return "", ErrInvalidUsernameOrPassword
 	}
 
 	sessionID := util.GenUUID()
@@ -33,7 +39,7 @@ func (t *AuthenticationService) Login(username string, password string) (string,
 		"username": user.Username,
 	}
 	if !xredis.Cli.HMSet(sessionKey, fields, 15*time.Minute) {
-		return "", errors.New("用户授权失败")
+		return "", ErrAuthFailed
 	}
 
 	return sessionID, nil
