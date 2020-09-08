@@ -9,6 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	ErrInvalidAuth = errors.New(constant.HTTPResponseCodeInvalidAuth.String())
+)
+
 // RoutePing ..
 func RoutePing(engine *gin.Engine) {
 	engine.GET("/ping", func(ctx *gin.Context) {
@@ -25,22 +29,14 @@ func RouteAuthentication(engine *gin.Engine) {
 	}
 }
 
-// RouteApp route app handler
-func RouteApp(engine *gin.Engine) {
-	group := engine.Group("/api/app")
-	{
-		group.GET("", HelloWord)
-	}
-}
-
 func currentUser(ctx *gin.Context) (*model.Admin, error) {
 	v, ok := ctx.Get("current-user")
 	if !ok {
-		return nil, errors.New(constant.HTTPResponseCodeInvalidAuth.String())
+		return nil, ErrInvalidAuth
 	}
 	user, ok := v.(*model.Admin)
 	if !ok {
-		return nil, errors.New(constant.HTTPResponseCodeInvalidAuth.String())
+		return nil, ErrInvalidAuth
 	}
 	return user, nil
 }
