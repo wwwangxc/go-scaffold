@@ -11,5 +11,5 @@ package http
 
 // @title go-scaffold/
 // @version 1.0.0
-// @description Golang HTTP服务
+// @description Golang 脚手架
 // @schemes http
