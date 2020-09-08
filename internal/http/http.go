@@ -19,6 +19,5 @@ func Serve() {
 		// register handler
 		handler.RoutePing,
 		handler.RouteAuthentication,
-		handler.RouteApp,
 	).Build().ListenAndServe()
 }
