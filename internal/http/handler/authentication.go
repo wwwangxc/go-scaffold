@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"go-scaffold/internal/http/dto"
 	"go-scaffold/internal/service"
 	"go-scaffold/pkg/conf"
 	"net/http"
@@ -11,17 +12,13 @@ import (
 // Login ..
 // @Tags 授权
 // @Summary 登录
-// @Description
-// @Param username formData string true "用户名"
-// @Param password formData string true "密码"
+// @Description 登陆成功后，签发一个15分钟效期的cookie，用于后端鉴权
+// @Param arg body dto.Login true "用户登陆信息"
 // @Success 200 {object} handler.Response "返回结果：{code:2000,message:"Success",data:nil}"
 // @Router /api/login [post]
 func Login(ctx *gin.Context) {
-	arg := struct {
-		Username string `json:"username" binding:"required"`
-		Password string `json:"password" binding:"required"`
-	}{}
-	if err := ctx.ShouldBindJSON(&arg); err != nil {
+	arg := &dto.Login{}
+	if err := ctx.ShouldBindJSON(arg); err != nil {
 		ResponseError(ctx, err)
 		return
 	}

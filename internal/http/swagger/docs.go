@@ -25,43 +25,22 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/app": {
-            "get": {
-                "tags": [
-                    "App"
-                ],
-                "summary": "Hello Word",
-                "responses": {
-                    "200": {
-                        "description": "返回结果：{code:2000,message:\"Success\",data:nil}",
-                        "schema": {
-                            "$ref": "#/definitions/handler.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/api/login": {
             "post": {
-                "description": "服务描述",
+                "description": "登陆成功后，签发一个15分钟效期的cookie，用于后端鉴权",
                 "tags": [
                     "授权"
                 ],
                 "summary": "登录",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "用户名",
-                        "name": "username",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "密码",
-                        "name": "password",
-                        "in": "formData",
-                        "required": true
+                        "description": "用户登陆信息",
+                        "name": "arg",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.Login"
+                        }
                     }
                 ],
                 "responses": {
@@ -92,11 +71,30 @@ var doc = `{
         }
     },
     "definitions": {
+        "dto.Login": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "description": "密码",
+                    "type": "string",
+                    "example": "123456"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
         "handler.Response": {
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "data": {
                     "type": "object"
@@ -125,7 +123,7 @@ var SwaggerInfo = swaggerInfo{
 	BasePath:    "",
 	Schemes:     []string{"http"},
 	Title:       "go-scaffold/",
-	Description: "网关HTTP服务",
+	Description: "Golang 脚手架",
 }
 
 type s struct{}
