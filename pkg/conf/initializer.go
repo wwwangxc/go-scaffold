@@ -20,7 +20,7 @@ var (
 // Init ..
 func Init() {
 	_initOnce.Do(func() {
-		flag.StringVar(&_confPath, "conf", "./config.toml", "default config path")
+		flag.StringVar(&_confPath, "config", "./config.toml", "default config path")
 		flag.Parse()
 		initialize()
 	})
