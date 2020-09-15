@@ -71,6 +71,12 @@ func TestHGetALL(t *testing.T) {
 	}
 }
 
+func TestHDel(t *testing.T) {
+	cli := getClient()
+	defer cli.Close()
+	t.Log(cli.HDel("hKey", []string{"f1", "f2", "f3", "f4"}))
+}
+
 func TestDel(t *testing.T) {
 	cli := getClient()
 	defer cli.Close()

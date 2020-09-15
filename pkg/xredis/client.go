@@ -96,6 +96,26 @@ func (t *Client) HMSet(key string, value map[string]interface{}, expire time.Dur
 	return err == nil
 }
 
+// Redis `HDEL key field [field ...]` command.
+func (t *Client) HDel(key string, fields []string) int64 {
+	if len(fields) == 0 {
+		return 0
+	}
+	num, err := t.cli.HDel(key, fields...).Result()
+	if err != nil {
+		return 0
+	}
+	return num
+}
+
+// -------------------------------------------------------------------------------- List Commands
+
+// -------------------------------------------------------------------------------- Set Commands
+
+// -------------------------------------------------------------------------------- Sorted Set Commands
+
+// -------------------------------------------------------------------------------- Global Commands
+
 // Redis `DEL` command.
 func (t *Client) Del(key ...string) int64 {
 	ret, err := t.cli.Del(key...).Result()
@@ -104,9 +124,3 @@ func (t *Client) Del(key ...string) int64 {
 	}
 	return ret
 }
-
-// -------------------------------------------------------------------------------- List Commands
-
-// -------------------------------------------------------------------------------- Set Commands
-
-// -------------------------------------------------------------------------------- Sorted Set Commands
