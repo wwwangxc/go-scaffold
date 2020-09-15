@@ -51,9 +51,9 @@ func authentication(args ...string) gin.HandlerFunc {
 		}
 
 		var user model.Admin
-		id, _ := strconv.Atoi(userID)
+		id, _ := strconv.Atoi(userID.String())
 		user.ID = id
-		user.Username = username
+		user.Username = username.String()
 
 		ctx.Set("currentUser", user)
 		ctx.Next()
