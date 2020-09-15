@@ -1,0 +1,32 @@
+[app]
+machine_id = 1      # 机器id
+
+# HTTP服务相关配置信息
+[app.http]
+mode = "debug"      # 运行模式
+port = 8080         # 端口
+shutdown_ttl = 5    # 关机等待时长（单位：秒）
+secret = '盐'       # 盐值
+token_ttl = 15      # token有效时长（单位：分钟）
+name = "http"       # 服务名称
+
+# mysql相关配置信息
+[app.mysql]
+dsn = "root:root@tcp(127.0.0.1:3306)/gateway?charset=utf8&parseTime=True&loc=Local"
+
+# redis相关配置信息
+[app.redis]
+addr = "127.0.0.1:6379"
+password = ""
+db = 0
+
+# log相关配置信息
+[app.log]
+dir = "."           # 日志存放目录
+name = "http.log"   # 日志名称
+level = "info"      # 日志级别
+debug = true        # 是否记录debug日志
+max_size = 100      # 日志文件大小（单位：MB）
+max_age = 5         # 备份时间（单位：天
+max_backups = 7     # 备份数量
+compress = false    # 是否压缩日志
