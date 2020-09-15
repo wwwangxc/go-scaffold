@@ -1,7 +1,6 @@
 package etcd
 
 import (
-	"go-scaffold/pkg/conf"
 	"strings"
 )
 
@@ -14,8 +13,10 @@ type ConfigHandler interface {
 
 // RegisterConfig ..
 type RegisterConfig struct {
-	Endpoints []string
-	TTL       int64
+	Endpoints      []string
+	DialTimeout    int64
+	HeartbeatCycle int64
+	LeaseTTL       int64
 }
 
 // RawRegisterConfig ..
@@ -24,8 +25,10 @@ func RawRegisterConfig(confPrefix string, confHandler ConfigHandler) *RegisterCo
 		confPrefix = confPrefix[:len(confPrefix)-1]
 	}
 	return &RegisterConfig{
-		Endpoints: confHandler.GetStringSlice(confPrefix + ".endpoints"),
-		TTL:       conf.GetInt64(confPrefix + ".ttl"),
+		Endpoints:      confHandler.GetStringSlice(confPrefix + ".endpoints"),
+		DialTimeout:    confHandler.GetInt64(confPrefix + ".dial_timeout"),
+		HeartbeatCycle: confHandler.GetInt64(confPrefix + ".heartbeat_cycle"),
+		LeaseTTL:       confHandler.GetInt64(confPrefix + ".lease_ttl"),
 	}
 }
 

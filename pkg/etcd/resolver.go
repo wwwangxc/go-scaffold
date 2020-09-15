@@ -20,7 +20,7 @@ type etcdResolver struct {
 func newResolver(t *ResolverConfig) (resolver.Builder, error) {
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:   t.Endpoints,
-		DialTimeout: time.Duration(t.TTL) * time.Second,
+		DialTimeout: time.Duration(t.DialTimeout) * time.Second,
 	})
 	if err != nil {
 		return nil, err

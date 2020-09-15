@@ -12,7 +12,7 @@ import (
 type ClientConfig struct {
 	Addr         string
 	BalancerName string
-	TTL          int
+	DialTimeout  int
 
 	resolver resolver.Builder
 }
@@ -25,7 +25,7 @@ func RawClientConfig(confPrefix string, confHandler ConfigHandler) *ClientConfig
 	return &ClientConfig{
 		Addr:         confHandler.GetString(confPrefix + ".address"),
 		BalancerName: confHandler.GetString(confPrefix + ".balancer_name"),
-		TTL:          confHandler.GetInt(confPrefix + ".ttl"),
+		DialTimeout:  confHandler.GetInt(confPrefix + ".dial_timeout"),
 	}
 }
 

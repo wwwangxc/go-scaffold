@@ -14,9 +14,9 @@ func newClient(conf *ClientConfig) (*grpc.ClientConn, error) {
 		resolver.Register(conf.resolver)
 	}
 	ctx := context.Background()
-	if conf.TTL > 0 {
+	if conf.DialTimeout > 0 {
 		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, time.Duration(conf.TTL)*time.Second)
+		ctx, cancel = context.WithTimeout(ctx, time.Duration(conf.DialTimeout)*time.Second)
 		defer cancel()
 	}
 	return grpc.DialContext(

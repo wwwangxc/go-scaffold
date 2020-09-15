@@ -8,9 +8,9 @@ import (
 
 // ResolverConfig ..
 type ResolverConfig struct {
-	Endpoints []string
-	TTL       int64
-	Scheme    string
+	Endpoints   []string
+	DialTimeout int64
+	Scheme      string
 }
 
 // RawResolverConfig ..
@@ -19,9 +19,9 @@ func RawResolverConfig(confPrefix string, confHandler ConfigHandler) *ResolverCo
 		confPrefix = confPrefix[:len(confPrefix)-1]
 	}
 	return &ResolverConfig{
-		Endpoints: confHandler.GetStringSlice(confPrefix + ".endpoints"),
-		TTL:       confHandler.GetInt64(confPrefix + ".ttl"),
-		Scheme:    confHandler.GetString(confPrefix + ".scheme"),
+		Endpoints:   confHandler.GetStringSlice(confPrefix + ".endpoints"),
+		DialTimeout: confHandler.GetInt64(confPrefix + ".dial_timeout"),
+		Scheme:      confHandler.GetString(confPrefix + ".scheme"),
 	}
 }
 
