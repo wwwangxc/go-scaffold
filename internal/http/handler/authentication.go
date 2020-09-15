@@ -17,8 +17,16 @@ import (
 // @Success 200 {object} handler.Response "返回结果：{code:2000,message:"Success",data:nil}"
 // @Router /api/login [post]
 func Login(ctx *gin.Context) {
+	arg := struct {
+		Username string `json:"username" binding:"required"`
+		Password string `json:"password" binding:"required"`
+	}{}
+	if err := ctx.ShouldBindJSON(&arg); err != nil {
+		ResponseError(ctx, err)
+		return
+	}
 	sessionID, err := service.Authentication.Login(
-		ctx.PostForm("username"), ctx.PostForm("password"))
+		arg.Username, arg.Password)
 	if err != nil {
 		ResponseError(ctx, err)
 		return
