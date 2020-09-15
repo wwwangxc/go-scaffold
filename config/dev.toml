@@ -1,48 +1,58 @@
 [app]
-    machine_id = 1  # 机器id
+machine_id = 1                  # 机器id
 
-    [app.http]
-        mode = "debug"  # 运行模式
-        port = 8080     # 端口
-        shutdown_ttl = 5 # 关机等待时长（单位：秒）
-        secret = '盐'
-        token_ttl = 15    # token有效时长（单位：分钟）
-        name = "http"
+# HTTP服务相关配置信息
+[app.http]
+mode = "debug"                  # 运行模式
+port = 8080                     # 端口
+shutdown_ttl = 5                # 关机等待时长（单位：秒）
+secret = '盐'                   # 盐值
+token_ttl = 15                  # token有效时长（单位：分钟）
+name = "http"                   # 服务名称
 
-    [app.grpc]
-        network = "tcp"
-        addr = "127.0.0.1:3000"
-        scheme = "scaffold"
-        name = "ping"
+# grpc服务相关配置信息
+[app.grpc]
+network = "tcp"                 # 服务网络协议
+addr = "127.0.0.1:3000"         # 服务地址
+scheme = "scaffold"             # 服务scheme
+name = "ping"                   # 服务名称
 
-        [app.grpc.register.etcd]
-            endpoints = ["127.0.0.1:2379"]
-            ttl = 5
+# etcd注册机相关配置信息
+[app.grpc.register.etcd]
+endpoints = ["127.0.0.1:2379"]  # 注册机地址
+dial_timeout = 5                # 拨号超时（单位：秒）
+heartbeat_cycle = 5             # 心跳周期（单位：秒）
+lease_ttl = 5                   # 租约时长（单位：秒）
 
-    [app.mysql]
-        dsn = "root:root@tcp(127.0.0.1:3306)/gateway?charset=utf8&parseTime=True&loc=Local"
+# mysql相关配置信息
+[app.mysql]
+dsn = "root:root@tcp(127.0.0.1:3306)/gateway?charset=utf8&parseTime=True&loc=Local"
 
-    [app.redis]
-        addr = "127.0.0.1:6379"
-        password = ""
-        db = 0
+# redis相关配置信息
+[app.redis]
+addr = "127.0.0.1:6379"
+password = ""
+db = 0
 
-    [app.log]
-        dir = "."
-        name = "http.log"
-        level = "info"
-        debug = true
-        max_size = 100
-        max_age = 5
-        max_backups = 7
-        compress = false
+# log相关配置信息
+[app.log]
+dir = "."                       # 日志存放目录
+name = "http.log"               # 日志名称
+level = "info"                  # 日志级别
+debug = true                    # 是否记录debug日志
+max_size = 100                  # 日志文件大小（单位：MB）
+max_age = 5                     # 备份时间（单位：天
+max_backups = 7                 # 备份数量
+compress = false                # 是否压缩日志
 
+# etcd解释器相关配置信息
 [grpc.resolver.etcd]
-    scheme = "scaffold"
-    endpoints = ["127.0.0.1:2379"]
-    ttl = 5
+scheme = "scaffold"             # scheme
+endpoints = ["127.0.0.1:2379"]  # 解释器地址
+dial_timeout = 5                # 拨号超时（单位：秒）
 
+# ping契约的
 [grpc.ping]
-    address = "scaffold:///ping"
-    balancer_name = "round_robin"
-    ttl = 5
+address = "scaffold:///ping"    # 兼容ping契约的grpc服务地址
+balancer_name = "round_robin"   # 负载均衡算法
+dial_timeout = 5                # 拨号超时（单位：秒）
