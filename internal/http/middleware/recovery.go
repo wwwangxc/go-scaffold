@@ -12,8 +12,8 @@ import (
 	"go.uber.org/zap"
 )
 
-// UseRecovery use recovery middleware
-func UseRecovery(engine *gin.Engine) {
+// Recovery middleware
+func Recovery(engine *gin.Engine) {
 	engine.Use(recovery(false))
 }
 

@@ -11,8 +11,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// UseAuthentication use authentication middleware
-func UseAuthentication(engine *gin.Engine) {
+// Authentication middleware
+func Authentication(engine *gin.Engine) {
 	engine.Use(authentication(
 		"/swagger/*any",
 		"/ping",

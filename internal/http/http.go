@@ -11,10 +11,10 @@ import (
 func Serve() {
 	xgin.RawConfig("app.http", conf.GetHandler()).Setup(
 		// middleware
-		middleware.UseLogger,
-		middleware.UseRecovery,
-		middleware.UseAuthentication,
-		middleware.UseSwagger,
+		middleware.Logger,
+		middleware.Recovery,
+		middleware.Authentication,
+		middleware.Swagger,
 
 		// register handler
 		handler.RoutePing,

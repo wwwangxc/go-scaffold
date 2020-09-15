@@ -8,7 +8,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// UseSwagger use swagger middleware
-func UseSwagger(engine *gin.Engine) {
+// Swagger middleware
+func Swagger(engine *gin.Engine) {
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

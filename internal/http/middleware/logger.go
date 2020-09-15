@@ -8,8 +8,8 @@ import (
 	"go.uber.org/zap"
 )
 
-// UseLogger use logger middleware
-func UseLogger(engine *gin.Engine) {
+// Logger middleware
+func Logger(engine *gin.Engine) {
 	engine.Use(logger())
 }
 
