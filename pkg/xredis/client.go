@@ -19,9 +19,8 @@ func (t *Client) Close() error {
 	return t.cli.Close()
 }
 
-// -------------------------------------------------------------------------------- Redis Commands String
+// -------------------------------------------------------------------------------- String Commands
 
-// Get ->
 // Redis `GET key` command.
 func (t *Client) Get(key string) String {
 	v, err := t.cli.Get(key).Result()
@@ -31,15 +30,56 @@ func (t *Client) Get(key string) String {
 	return String(v)
 }
 
-// Set ->
 // Redis `SET key value [expiration]` command.
 func (t *Client) Set(key string, value interface{}, expire time.Duration) bool {
-	return t.cli.Set(key, value, expire).Err() == redis.Nil
+	return t.cli.Set(key, value, expire).Err() == nil
 }
 
-// -------------------------------------------------------------------------------- Redis Commands Hash
+// -------------------------------------------------------------------------------- Hash Commands
 
-// HMSet ->
+// Redis `HGET key field` command.
+func (t *Client) HGet(key string, field string) String {
+	v, err := t.cli.HGet(key, field).Result()
+	if err != nil {
+		return ""
+	}
+	return String(v)
+}
+
+// Redis `HMGET key field [field ...]` command.
+func (t *Client) HMGet(key string, fields []string) map[string]String {
+	if len(fields) == 0 {
+		return nil
+	}
+	v, err := t.cli.HMGet(key, fields...).Result()
+	if err != nil {
+		return nil
+	}
+	retMap := make(map[string]String, len(fields))
+	for index, value := range fields {
+		tmp := v[index]
+		if tmp != nil {
+			retMap[value] = String(tmp.(string))
+		} else {
+			retMap[value] = ""
+		}
+	}
+	return retMap
+}
+
+// Redis `HGETALL key` command.
+func (t *Client) HGetAll(key string) map[string]String {
+	v, err := t.cli.HGetAll(key).Result()
+	if err != nil {
+		return nil
+	}
+	retMap := make(map[string]String, len(v))
+	for k, value := range v {
+		retMap[k] = String(value)
+	}
+	return retMap
+}
+
 // Redis `HMSet` `Expire` command with pipeline.
 func (t *Client) HMSet(key string, value map[string]interface{}, expire time.Duration) bool {
 	if len(value) == 0 {
@@ -56,13 +96,6 @@ func (t *Client) HMSet(key string, value map[string]interface{}, expire time.Dur
 	return err == nil
 }
 
-// HGetAll ->
-// Redis `HGETALL key` command.
-func (t *Client) HGetAll(key string) map[string]string {
-	return t.cli.HGetAll(key).Val()
-}
-
-// Del ->
 // Redis `DEL` command.
 func (t *Client) Del(key ...string) int64 {
 	ret, err := t.cli.Del(key...).Result()
@@ -71,3 +104,9 @@ func (t *Client) Del(key ...string) int64 {
 	}
 	return ret
 }
+
+// -------------------------------------------------------------------------------- List Commands
+
+// -------------------------------------------------------------------------------- Set Commands
+
+// -------------------------------------------------------------------------------- Sorted Set Commands
