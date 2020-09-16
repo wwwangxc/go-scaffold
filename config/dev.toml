@@ -27,6 +27,9 @@ lease_ttl = 5                   # 租约时长（单位：秒）
 # mysql相关配置信息
 [app.mysql]
 dsn = "root:root@tcp(127.0.0.1:3306)/gateway?charset=utf8&parseTime=True&loc=Local"
+max_idle_conns = 50
+max_open_conns = 100
+conn_max_lifetime = "300s"
 
 # redis相关配置信息
 [app.redis]
