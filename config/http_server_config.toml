@@ -13,9 +13,9 @@ name = "http"       # 服务名称
 # mysql相关配置信息
 [app.mysql]
 dsn = "root:root@tcp(127.0.0.1:3306)/gateway?charset=utf8&parseTime=True&loc=Local"
-max_idle_conns = 50
-max_open_conns = 100
-conn_max_lifetime = "300s"
+max_idle_conns = 50         # 最大空闲连接数
+max_open_conns = 100        # 最大活动连接数
+conn_max_lifetime = "300s"  # 连接的最大存活时间
 
 # redis相关配置信息
 [app.redis]
