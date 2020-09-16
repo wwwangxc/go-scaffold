@@ -2,12 +2,28 @@ package xgorm
 
 import (
 	"testing"
+	"time"
 )
 
-func TestGorm(t *testing.T) {
+func TestBuild(t *testing.T) {
 	conf := &Config{
-		DSN: "root:root@tcp(127.0.0.1:3306)/gateway?charset=utf8&parseTime=True&loc=Local",
+		DSN:             "root:root@tcp(127.0.0.1:3306)/scaffold?charset=utf8&parseTime=True&loc=Local",
+		ConnMaxLifetime: 300 * time.Second,
+		MaxIdleConns:    50,
+		MaxOpenConns:    100,
 	}
 	cli := conf.Build()
 	defer cli.Close()
+}
+
+func TestAppend(t *testing.T) {
+	conf := &Config{
+		DSN:             "root:root@tcp(127.0.0.1:3306)/scaffold?charset=utf8&parseTime=True&loc=Local",
+		ConnMaxLifetime: 300 * time.Second,
+		MaxIdleConns:    50,
+		MaxOpenConns:    100,
+	}
+	conf.Append("test")
+	defer Store("test").Close()
+
 }
