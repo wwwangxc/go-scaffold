@@ -19,7 +19,8 @@ func main() {
 	log.RawConfig("app.log", conf.GetHandler()).Init()                                   // 加载日志
 	defer log.Sync()                                                                     // 日志落盘
 	xgorm.RawConfig("app.mysql", conf.GetHandler()).Append(constant.DBStoreNameScaffold) // 加载gorm
-	defer xgorm.Close(constant.DBStoreNameScaffold)
+	xgorm.RawConfig("app.mysql", conf.GetHandler()).Append(constant.DBStoreNameTest)     // 加载gorm
+	defer xgorm.CloseAll()
 	xredis.RawConfig("app.redis", conf.GetHandler()).Init() // 加载redis
 	defer xredis.Cli.Close()
 	http.Serve() // 启动服务
