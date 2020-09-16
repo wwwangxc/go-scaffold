@@ -41,6 +41,11 @@ func GetTime(key string) time.Time {
 	return viper.GetTime(key)
 }
 
+// GetDuration ..
+func GetDuration(key string) time.Duration {
+	return viper.GetDuration(key)
+}
+
 // InConfig ..
 func InConfig(key string) bool {
 	return viper.InConfig(key)
