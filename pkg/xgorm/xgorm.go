@@ -34,6 +34,12 @@ func Close(storeName string) error {
 	return store.close(storeName)
 }
 
+// Exist ..
+func Exist(storeName string) bool {
+	_, err := store.get(storeName)
+	return err == nil
+}
+
 type dbStore struct {
 	pool map[string]*DB
 	rw   sync.RWMutex
@@ -100,6 +106,8 @@ func (t *DB) Close() error {
 	if t.Closed {
 		return nil
 	}
+	t.Lock()
+	defer t.Unlock()
 	if err := t.DB.Close(); err != nil {
 		return err
 	}
