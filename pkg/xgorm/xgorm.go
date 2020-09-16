@@ -29,15 +29,24 @@ func Store(storeName string) *DB {
 	return db
 }
 
+// Exist ..
+func Exist(storeName string) bool {
+	_, err := store.get(storeName)
+	return err == nil
+}
+
 // Close ..
 func Close(storeName string) error {
 	return store.close(storeName)
 }
 
-// Exist ..
-func Exist(storeName string) bool {
-	_, err := store.get(storeName)
-	return err == nil
+// CloseAll ..
+func CloseAll() {
+	store.rw.Lock()
+	defer store.rw.Unlock()
+	for _, db := range store.pool {
+		db.Close()
+	}
 }
 
 type dbStore struct {
