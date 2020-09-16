@@ -12,13 +12,13 @@ import (
 )
 
 func main() {
-	conf.Init()                                                                          // 加载配置文件
-	log.RawConfig("app.log", conf.GetHandler()).Init()                                   // 加载日志
-	defer log.Sync()                                                                     // 日志落盘
-	xgorm.RawConfig("app.mysql", conf.GetHandler()).Append(constant.DBStoreNameScaffold) // 加载gorm
-	defer xgorm.Close(constant.DBStoreNameScaffold)
-	xgorm.RawConfig("app.mysql", conf.GetHandler()).Append(constant.DBStoreNameTest) // 加载gorm
-	defer xgorm.Close(constant.DBStoreNameTest)
+	conf.Init()                                                                         // 加载配置文件
+	log.RawConfig("app.log", conf.GetHandler()).Init()                                  // 加载日志
+	defer log.Sync()                                                                    // 日志落盘
+	xgorm.RawConfig("app.mysql.db1", conf.GetHandler()).Append(constant.DBStoreNameDB1) // 加载gorm
+	defer xgorm.Close(constant.DBStoreNameDB1)
+	xgorm.RawConfig("app.mysql.db2", conf.GetHandler()).Append(constant.DBStoreNameDB2) // 加载gorm
+	defer xgorm.Close(constant.DBStoreNameDB2)
 	xredis.RawConfig("app.redis", conf.GetHandler()).Init() // 加载redis
 	defer xredis.Cli.Close()
 	grpc.Serve()

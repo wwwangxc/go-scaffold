@@ -36,7 +36,7 @@ func Gen(obj interface{}) (string, error) {
 	c := &claims{
 		JSON: json,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Duration(config.TTL) * time.Minute).Unix(),
+			ExpiresAt: time.Now().Add(config.TTL).Unix(),
 			Issuer:    viper.GetString(config.Issuer),
 		},
 	}

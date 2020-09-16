@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"go.uber.org/zap"
 )
@@ -33,9 +32,7 @@ func (t *HTTPServer) ListenAndServe() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	log.Info("Shutdown Server ...")
-	ctx, cancel := context.WithTimeout(
-		context.Background(),
-		time.Duration(t.conf.ShutdownTTL)*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), t.conf.ShutdownTTL)
 	defer cancel()
 	if err := t.Shutdown(ctx); err != nil {
 		log.Fatal("Server Shutdown: ", zap.Error(err))

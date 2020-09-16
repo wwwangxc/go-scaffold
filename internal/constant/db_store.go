@@ -1,6 +1,6 @@
 package constant
 
 const (
-	DBStoreNameScaffold = "scaffold"
-	DBStoreNameTest     = "test"
+	DBStoreNameDB1 = "db1"
+	DBStoreNameDB2 = "db2"
 )

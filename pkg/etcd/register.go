@@ -17,7 +17,7 @@ type Register struct {
 func newRegister(conf *RegisterConfig) *Register {
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:   conf.Endpoints,
-		DialTimeout: time.Duration(conf.DialTimeout) * time.Second,
+		DialTimeout: conf.DialTimeout,
 	})
 	if err != nil {
 		panic(err.Error())
@@ -30,7 +30,7 @@ func newRegister(conf *RegisterConfig) *Register {
 
 // RegistryService ..
 func (t *Register) RegistryService(key, value string) {
-	ticker := time.NewTicker(time.Duration(t.conf.HeartbeatCycle) * time.Second)
+	ticker := time.NewTicker(t.conf.HeartbeatCycle)
 	go func() {
 		for {
 			resp, err := t.cli.Get(context.Background(), key)
@@ -54,7 +54,7 @@ func (t *Register) UnRegistryService(key string) {
 }
 
 func (t *Register) keepAlive(key, value string) error {
-	lease, err := t.cli.Grant(context.Background(), t.conf.LeaseTTL)
+	lease, err := t.cli.Grant(context.Background(), int64(t.conf.LeaseTTL.Seconds()))
 	if err != nil {
 		fmt.Printf("etcd grant error:%s", err)
 		return err

@@ -2,6 +2,7 @@ package xgrpc
 
 import (
 	"strings"
+	"time"
 
 	"google.golang.org/grpc"
 
@@ -12,7 +13,7 @@ import (
 type ClientConfig struct {
 	Addr         string
 	BalancerName string
-	DialTimeout  int
+	DialTimeout  time.Duration
 
 	resolver resolver.Builder
 }
@@ -25,7 +26,7 @@ func RawClientConfig(confPrefix string, confHandler ConfigHandler) *ClientConfig
 	return &ClientConfig{
 		Addr:         confHandler.GetString(confPrefix + ".address"),
 		BalancerName: confHandler.GetString(confPrefix + ".balancer_name"),
-		DialTimeout:  confHandler.GetInt(confPrefix + ".dial_timeout"),
+		DialTimeout:  confHandler.GetDuration(confPrefix + ".dial_timeout"),
 	}
 }
 

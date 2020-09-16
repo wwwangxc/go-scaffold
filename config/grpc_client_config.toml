@@ -1,11 +1,11 @@
 # etcd解释器相关配置信息
 [grpc.resolver.etcd]
-scheme = "scaffold"                 # scheme
-endpoints = ["127.0.0.1:2379"]      # 解释器地址
-dial_timeout = 5                    # 拨号超时（单位：秒）
+scheme = "scaffold"             # scheme
+endpoints = ["127.0.0.1:2379"]  # 解释器地址
+dial_timeout = "5s"             # 拨号超时（单位：秒）
 
-# ping契约的
+# ping契约相关配置信息
 [grpc.ping]
-address = "scaffold:///ping"        # 兼容ping契约的grpc服务地址
-balancer_name = "round_robin"       # 负载均衡算法
-dial_timeout = 5                    # 拨号超时（单位：秒）
+address = "scaffold:///ping"    # 兼容ping契约的grpc服务地址
+balancer_name = "round_robin"   # 负载均衡算法
+dial_timeout = "5s"             # 拨号超时（单位：秒）

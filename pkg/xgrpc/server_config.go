@@ -5,6 +5,7 @@ package xgrpc
 
 import (
 	"strings"
+	"time"
 
 	"google.golang.org/grpc"
 )
@@ -13,6 +14,7 @@ import (
 type ConfigHandler interface {
 	GetString(key string) string
 	GetInt(key string) int
+	GetDuration(key string) time.Duration
 }
 
 // Register ..

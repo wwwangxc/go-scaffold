@@ -1,10 +1,13 @@
 package jwt
 
-import "strings"
+import (
+	"strings"
+	"time"
+)
 
 // ConfigHandler ..
 type ConfigHandler interface {
-	GetInt(key string) int
+	GetDuration(key string) time.Duration
 	GetString(key string) string
 }
 
@@ -12,7 +15,7 @@ type ConfigHandler interface {
 type Config struct {
 	Issuer string
 	Secret string
-	TTL    int
+	TTL    time.Duration
 }
 
 // RawConfig ..
@@ -23,7 +26,7 @@ func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
 	return &Config{
 		Issuer: confHandler.GetString(confPrefix + ".name"),
 		Secret: confHandler.GetString(confPrefix + ".secret"),
-		TTL:    confHandler.GetInt(confPrefix + ".token_ttl"),
+		TTL:    confHandler.GetDuration(confPrefix + ".token_ttl"),
 	}
 }
 

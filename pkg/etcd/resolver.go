@@ -3,7 +3,6 @@ package etcd
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
@@ -20,7 +19,7 @@ type etcdResolver struct {
 func newResolver(t *ResolverConfig) (resolver.Builder, error) {
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:   t.Endpoints,
-		DialTimeout: time.Duration(t.DialTimeout) * time.Second,
+		DialTimeout: t.DialTimeout,
 	})
 	if err != nil {
 		return nil, err

@@ -9,7 +9,7 @@ func TestJWT(t *testing.T) {
 	conf := &Config{
 		Issuer: "xc",
 		Secret: "盐",
-		TTL:    5,
+		TTL:    5 * time.Minute,
 	}
 	conf.Init()
 

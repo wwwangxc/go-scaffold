@@ -2,21 +2,22 @@ package etcd
 
 import (
 	"strings"
+	"time"
 )
 
 // ConfigHandler ..
 type ConfigHandler interface {
-	GetInt64(key string) int64
 	GetStringSlice(key string) []string
 	GetString(key string) string
+	GetDuration(key string) time.Duration
 }
 
 // RegisterConfig ..
 type RegisterConfig struct {
 	Endpoints      []string
-	DialTimeout    int64
-	HeartbeatCycle int64
-	LeaseTTL       int64
+	DialTimeout    time.Duration
+	HeartbeatCycle time.Duration
+	LeaseTTL       time.Duration
 }
 
 // RawRegisterConfig ..
@@ -26,9 +27,9 @@ func RawRegisterConfig(confPrefix string, confHandler ConfigHandler) *RegisterCo
 	}
 	return &RegisterConfig{
 		Endpoints:      confHandler.GetStringSlice(confPrefix + ".endpoints"),
-		DialTimeout:    confHandler.GetInt64(confPrefix + ".dial_timeout"),
-		HeartbeatCycle: confHandler.GetInt64(confPrefix + ".heartbeat_cycle"),
-		LeaseTTL:       confHandler.GetInt64(confPrefix + ".lease_ttl"),
+		DialTimeout:    confHandler.GetDuration(confPrefix + ".dial_timeout"),
+		HeartbeatCycle: confHandler.GetDuration(confPrefix + ".heartbeat_cycle"),
+		LeaseTTL:       confHandler.GetDuration(confPrefix + ".lease_ttl"),
 	}
 }
 

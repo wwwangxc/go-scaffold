@@ -2,6 +2,7 @@ package etcd
 
 import (
 	"strings"
+	"time"
 
 	"google.golang.org/grpc/resolver"
 )
@@ -9,7 +10,7 @@ import (
 // ResolverConfig ..
 type ResolverConfig struct {
 	Endpoints   []string
-	DialTimeout int64
+	DialTimeout time.Duration
 	Scheme      string
 }
 
@@ -20,7 +21,7 @@ func RawResolverConfig(confPrefix string, confHandler ConfigHandler) *ResolverCo
 	}
 	return &ResolverConfig{
 		Endpoints:   confHandler.GetStringSlice(confPrefix + ".endpoints"),
-		DialTimeout: confHandler.GetInt64(confPrefix + ".dial_timeout"),
+		DialTimeout: confHandler.GetDuration(confPrefix + ".dial_timeout"),
 		Scheme:      confHandler.GetString(confPrefix + ".scheme"),
 	}
 }
