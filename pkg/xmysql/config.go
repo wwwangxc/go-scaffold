@@ -2,36 +2,45 @@ package xmysql
 
 import (
 	"strings"
-
-	"github.com/jmoiron/sqlx"
+	"time"
 )
 
 // ConfigHandler ..
 type ConfigHandler interface {
 	GetString(key string) string
+	GetInt(key string) int
+	GetDuration(key string) time.Duration
 }
 
 // Config ..
 type Config struct {
-	DSN string
+	DSN             string
+	MaxIdleConns    int           // 最大空闲连接数
+	MaxOpenConns    int           // 最大活动连接数
+	ConnMaxLifetime time.Duration // 连接的最大存活时间
 }
 
 // RawConfig ..
-func RawConfig(confPath string, confHandler ConfigHandler) *Config {
-	if strings.HasSuffix(confPath, ",") {
-		confPath = confPath[:len(confPath)-1]
+func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
+	if strings.HasSuffix(confPrefix, ",") {
+		confPrefix = confPrefix[:len(confPrefix)-1]
 	}
 	return &Config{
-		DSN: confHandler.GetString(confPath + ".dsn"),
+		DSN:             confHandler.GetString(confPrefix + ".dsn"),
+		MaxIdleConns:    confHandler.GetInt(confPrefix + ".max_idle_conns"),
+		MaxOpenConns:    confHandler.GetInt(confPrefix + ".max_open_conns"),
+		ConnMaxLifetime: confHandler.GetDuration(confPrefix + ".conn_max_lifetime"),
 	}
-}
-
-// Init ..
-func (t *Config) Init() {
-	initialize(t)
 }
 
 // Build ..
-func (t *Config) Build() *sqlx.DB {
-	return newClient(t)
+func (t *Config) Build() *DB {
+	return newDB(t)
+}
+
+// Append ..
+func (t *Config) Append(storeName string) *DB {
+	db := newDB(t)
+	store.append(storeName, db)
+	return db
 }
