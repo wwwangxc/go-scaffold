@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-var _initOnce sync.Once
+var initOnce sync.Once
 
 // ConfigHandler ..
 type ConfigHandler interface {
@@ -36,7 +36,7 @@ func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
 
 // Init ..
 func (t *Config) Init() {
-	_initOnce.Do(func() {
+	initOnce.Do(func() {
 		initialize(t)
 	})
 }

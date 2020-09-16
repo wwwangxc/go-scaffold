@@ -26,7 +26,7 @@ type claims struct {
 
 // Gen ..
 func Gen(obj interface{}) (string, error) {
-	if _config == nil {
+	if config == nil {
 		return "", ErrNotInit
 	}
 	json, err := jsoniter.Marshal(obj)
@@ -36,17 +36,17 @@ func Gen(obj interface{}) (string, error) {
 	c := &claims{
 		JSON: json,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Duration(_config.TTL) * time.Minute).Unix(),
-			Issuer:    viper.GetString(_config.Issuer),
+			ExpiresAt: time.Now().Add(time.Duration(config.TTL) * time.Minute).Unix(),
+			Issuer:    viper.GetString(config.Issuer),
 		},
 	}
 	token := jwtgo.NewWithClaims(jwt.SigningMethodHS256, c)
-	return token.SignedString([]byte(_config.Secret))
+	return token.SignedString([]byte(config.Secret))
 }
 
 // Parse ..
 func Parse(token string, obj interface{}) error {
-	if _config == nil {
+	if config == nil {
 		return ErrNotInit
 	}
 	c, err := parse(token)
@@ -58,7 +58,7 @@ func Parse(token string, obj interface{}) error {
 
 // Expired ..
 func Expired(token string) (bool, error) {
-	if _config == nil {
+	if config == nil {
 		return false, ErrNotInit
 	}
 	c, err := parse(token)
@@ -70,7 +70,7 @@ func Expired(token string) (bool, error) {
 
 func parse(tokenStr string) (*claims, error) {
 	token, err := jwtgo.ParseWithClaims(tokenStr, &claims{}, func(t *jwt.Token) (interface{}, error) {
-		return []byte(_config.Secret), nil
+		return []byte(config.Secret), nil
 	})
 	if err != nil {
 		return nil, err
