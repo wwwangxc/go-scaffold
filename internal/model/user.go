@@ -26,7 +26,7 @@ func (t *Admin) TableName() string {
 
 // GetByUsername ..
 func (t *Admin) GetByUsername(username string) error {
-	if err := xgorm.Store(constant.DBStoreNameDB1).
+	if err := xgorm.Store(constant.MySQLStoreNameDB1).
 		Where("user_name = ?", username).Find(t).Error; err != nil && err != gorm.ErrRecordNotFound {
 		return err
 	}
