@@ -110,11 +110,95 @@ func (t *Client) HDel(key string, fields []string) int64 {
 
 // -------------------------------------------------------------------------------- List Commands
 
+// Redis `LLEN key` command.
+func (t *Client) LLen(key string) int64 {
+	len, err := t.cli.LLen(key).Result()
+	if err != nil {
+		return 0
+	}
+	return len
+}
+
+// Redis `LPOP key` command.
+func (t *Client) LPop(key string) String {
+	v, err := t.cli.LPop(key).Result()
+	if err != nil {
+		return ""
+	}
+	return String(v)
+}
+
+// Redis `LPUSH key value [value ...]` command.
+func (t *Client) LPush(key string, values ...interface{}) (bool, error) {
+	v, err := t.cli.LPush(key, values...).Result()
+	if err != nil {
+		return false, err
+	}
+	return int(v) == len(values), err
+}
+
+// Redis `RPOP key` command.
+func (t *Client) RPop(key string) String {
+	v, err := t.cli.RPop(key).Result()
+	if err != nil {
+		return ""
+	}
+	return String(v)
+}
+
+// Redis `RPUSH key value [value ...]` command.
+func (t *Client) RPush(key string, values ...interface{}) (bool, error) {
+	v, err := t.cli.RPush(key, values...).Result()
+	if err != nil {
+		return false, err
+	}
+	return int(v) == len(values), err
+}
+
 // -------------------------------------------------------------------------------- Set Commands
+
+// Redis `SADD key member [member ...]` command.
+func (t *Client) SAdd(key string, members ...interface{}) (int64, error) {
+	if len(members) == 0 {
+		return 0, nil
+	}
+	return t.cli.SAdd(key, members...).Result()
+}
+
+// Redis `SPOP key` command.
+func (t *Client) SPop(key string) String {
+	v, err := t.cli.SPop(key).Result()
+	if err != nil {
+		return ""
+	}
+	return String(v)
+}
+
+// Redis `SISMEMBER key member` command.
+func (t *Client) SIsMember(key string, member interface{}) (bool, error) {
+	return t.cli.SIsMember(key, member).Result()
+}
 
 // -------------------------------------------------------------------------------- Sorted Set Commands
 
+// Redis `ZADD key score member [[score member] [score member] ...]` command.
+func (t *Client) ZAdd(key string, members ...redis.Z) (int64, error) {
+	if len(members) == 0 {
+		return 0, nil
+	}
+	return t.cli.ZAdd(key, members...).Result()
+}
+
 // -------------------------------------------------------------------------------- Global Commands
+
+// Redis `EXISTS` command.
+func (t *Client) Exists(key string) bool {
+	v, err := t.cli.Exists(key).Result()
+	if err != nil {
+		return false
+	}
+	return v == 1
+}
 
 // Redis `DEL` command.
 func (t *Client) Del(key ...string) int64 {
@@ -123,4 +207,13 @@ func (t *Client) Del(key ...string) int64 {
 		return 0
 	}
 	return ret
+}
+
+// Redis `TTL key` command.
+func (t *Client) TTL(key string) (int64, error) {
+	v, err := t.cli.TTL(key).Result()
+	if err != nil {
+		return 0, err
+	}
+	return int64(v.Seconds()), nil
 }
