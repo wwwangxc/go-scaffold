@@ -78,6 +78,9 @@ func (t *dbStore) close(storeName string) error {
 	if err != nil {
 		return err
 	}
+	if db.Closed {
+		return nil
+	}
 	t.rw.Lock()
 	defer t.rw.Lock()
 	if db.Closed {
@@ -117,6 +120,9 @@ func (t *DB) Close() error {
 	}
 	t.Lock()
 	defer t.Unlock()
+	if t.Closed {
+		return nil
+	}
 	if err := t.DB.Close(); err != nil {
 		return err
 	}
