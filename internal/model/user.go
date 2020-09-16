@@ -1,6 +1,7 @@
 package model
 
 import (
+	"go-scaffold/internal/constant"
 	"go-scaffold/pkg/xgorm"
 	"time"
 
@@ -25,7 +26,8 @@ func (t *Admin) TableName() string {
 
 // GetByUsername ..
 func (t *Admin) GetByUsername(username string) error {
-	if err := xgorm.Cli.Where("user_name = ?", username).Find(t).Error; err != nil && err != gorm.ErrRecordNotFound {
+	if err := xgorm.Store(constant.DBStoreNameScaffold).
+		Where("user_name = ?", username).Find(t).Error; err != nil && err != gorm.ErrRecordNotFound {
 		return err
 	}
 	return nil
