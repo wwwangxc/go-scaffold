@@ -1,6 +1,7 @@
 package xredis
 
 import (
+	"sync"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -8,15 +9,43 @@ import (
 
 // Client ..
 type Client struct {
-	cli *redis.Client
+	cli    *redis.Client
+	Closed bool
+	mu     sync.Mutex
+}
+
+func newClient(conf *Config) *Client {
+	client := redis.NewClient(&redis.Options{
+		Addr:       conf.Addr,
+		Password:   conf.Password,
+		DB:         conf.DB,
+		MaxRetries: conf.MaxRetries,
+	})
+	if _, err := client.Ping().Result(); err != nil {
+		panic(err.Error())
+	}
+	return &Client{
+		cli:    client,
+		Closed: false,
+	}
 }
 
 // Close ..
 func (t *Client) Close() error {
-	if t.cli == nil {
+	if t.cli == nil || t.Closed {
 		return nil
 	}
-	return t.cli.Close()
+	t.mu.Lock()
+	defer t.mu.Unlock()
+	if t.Closed {
+		return nil
+	}
+	err := t.cli.Close()
+	if err != nil {
+		return nil
+	}
+	t.Closed = true
+	return nil
 }
 
 // -------------------------------------------------------------------------------- String Commands

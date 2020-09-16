@@ -35,7 +35,7 @@ func authentication(args ...string) gin.HandlerFunc {
 			return
 		}
 
-		tmp := xredis.Cli.HGetAll(constant.RedisKeySession + sessionID)
+		tmp := xredis.Store(constant.RedisStoreNameDB0).HGetAll(constant.RedisKeySession + sessionID)
 		userID, ok := tmp["userID"]
 		if !ok {
 			handler.ResponseWithCode(ctx, constant.HTTPResponseCodeInvalidAuth)

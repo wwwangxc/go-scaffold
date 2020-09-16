@@ -38,7 +38,7 @@ func (t *AuthenticationService) Login(username string, password string) (string,
 		"userID":   user.ID,
 		"username": user.Username,
 	}
-	if !xredis.Cli.HMSet(sessionKey, fields, 15*time.Minute) {
+	if !xredis.Store(constant.RedisStoreNameDB0).HMSet(sessionKey, fields, 15*time.Minute) {
 		return "", ErrAuthFailed
 	}
 
@@ -47,5 +47,5 @@ func (t *AuthenticationService) Login(username string, password string) (string,
 
 // Logout ..
 func (t *AuthenticationService) Logout(sessionID string) {
-	xredis.Cli.Del(constant.RedisKeySession + sessionID)
+	xredis.Store(constant.RedisStoreNameDB0).Del(constant.RedisKeySession + sessionID)
 }

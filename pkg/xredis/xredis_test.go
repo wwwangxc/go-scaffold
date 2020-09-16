@@ -10,7 +10,7 @@ func TestRedis(t *testing.T) {
 		Password: "",
 		DB:       0,
 	}
-	conf.Init()
+	conf.Build()
 }
 
 func TestSet(t *testing.T) {

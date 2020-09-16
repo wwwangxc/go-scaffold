@@ -34,14 +34,14 @@ func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
 	}
 }
 
-// Init ..
-func (t *Config) Init() {
-	initOnce.Do(func() {
-		initialize(t)
-	})
-}
-
 // Build ..
 func (t *Config) Build() *Client {
 	return newClient(t)
+}
+
+// Append ..
+func (t *Config) Append(storeName string) *Client {
+	cli := newClient(t)
+	store.append(storeName, cli)
+	return cli
 }
