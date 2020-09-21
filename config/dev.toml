@@ -67,8 +67,18 @@ scheme = "scaffold"             # scheme
 endpoints = ["127.0.0.1:2379"]  # 解释器地址
 dial_timeout = "5s"             # 拨号超时（单位：秒）
 
-# ping契约的
+# ping契约相关配置信息
 [grpc.ping]
 address = "scaffold:///ping"    # 兼容ping契约的grpc服务地址
 balancer_name = "round_robin"   # 负载均衡算法
 dial_timeout = "5s"             # 拨号超时（单位：秒）
+
+# kafka producer 相关配置信息
+[app.kafka.topic01.producer]
+broker_address = ["127.0.0.1:9092", "127.0.0.1:9093"]
+topic = "topic01"
+
+# kafka producer 相关配置信息
+[app.kafka.topic02.producer]
+broker_address = ["127.0.0.1:9092", "127.0.0.1:9093"]
+topic = "topic02"
