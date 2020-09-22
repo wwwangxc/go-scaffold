@@ -25,6 +25,7 @@
 │   ├── conf              # 配置文件
 │   ├── etcd              # etcd解释器及注册机
 │   ├── jwt               # jwt
+│   ├── kafka             # kafka
 │   ├── log               # 日志
 │   ├── util              # 工具
 │   ├── xgin              # gin
@@ -39,5 +40,6 @@
 ```
 
 ### 补充
- `google.golang.org/grpc` 包与 `github.com/coreos/etcd`发生冲突时，参照：https://github.com/etcd-io/etcd/pull/11564/files
+
+1. `google.golang.org/grpc` 包与 `github.com/coreos/etcd`发生冲突时，参照：https://github.com/etcd-io/etcd/pull/11564/files
 
