@@ -18,7 +18,7 @@ func newAsyncProducer(conf *ProducerConfig) (*AsyncProducer, error) {
 	producerConfig := sarama.NewConfig()
 	producerConfig.Producer.RequiredAcks = sarama.WaitForAll
 	producerConfig.Producer.Partitioner = sarama.NewRandomPartitioner
-	producer, err := sarama.NewAsyncProducer(conf.BrokerAddress, producerConfig)
+	producer, err := sarama.NewAsyncProducer(conf.Brokers, producerConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func newSyncProducer(conf *ProducerConfig) (*SyncProducer, error) {
 	producerConfig.Producer.RequiredAcks = sarama.WaitForAll
 	producerConfig.Producer.Partitioner = sarama.NewRandomPartitioner
 	producerConfig.Producer.Return.Successes = true
-	producer, err := sarama.NewSyncProducer(conf.BrokerAddress, producerConfig)
+	producer, err := sarama.NewSyncProducer(conf.Brokers, producerConfig)
 	if err != nil {
 		return nil, err
 	}

@@ -8,8 +8,8 @@ import (
 
 func TestAsyncProducer(t *testing.T) {
 	conf := &ProducerConfig{
-		Topic:         "app_test",
-		BrokerAddress: []string{"127.0.0.1:9093"},
+		Topic:   "app_test",
+		Brokers: []string{"127.0.0.1:9093"},
 	}
 	p, err := conf.Build2Async()
 	if err != nil {
@@ -35,8 +35,8 @@ func TestAsyncProducer(t *testing.T) {
 
 func TestSyncProducer(t *testing.T) {
 	conf := &ProducerConfig{
-		Topic:         "app_test",
-		BrokerAddress: []string{"127.0.0.1:9093"},
+		Topic:   "app_test",
+		Brokers: []string{"127.0.0.1:9093"},
 	}
 	p, err := conf.Build2Sync()
 	if err != nil {
