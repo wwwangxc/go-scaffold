@@ -10,8 +10,8 @@ type ConfigHandler interface {
 
 // ProducerConfig ..
 type ProducerConfig struct {
-	Topic         string
-	BrokerAddress []string
+	Topic   string
+	Brokers []string
 }
 
 // RawProducerConfig ..
@@ -20,8 +20,8 @@ func RawProducerConfig(confPrefix string, confHandler ConfigHandler) *ProducerCo
 		confPrefix = confPrefix[:len(confPrefix)-1]
 	}
 	return &ProducerConfig{
-		Topic:         confHandler.GetString(confPrefix + ".topic"),
-		BrokerAddress: confHandler.GetStringSlice(confPrefix + ".broker_address"),
+		Topic:   confHandler.GetString(confPrefix + ".topic"),
+		Brokers: confHandler.GetStringSlice(confPrefix + ".brokers"),
 	}
 }
 

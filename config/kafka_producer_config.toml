@@ -1,7 +1,7 @@
 [app.kafka.topic01.producer]
-broker_address = ["127.0.0.1:9092", "127.0.0.1:9093"]
+brokers = ["127.0.0.1:9092", "127.0.0.1:9093"]
 topic = "topic01"
 
 [app.kafka.topic02.producer]
-broker_address = ["127.0.0.1:9092", "127.0.0.1:9093"]
+brokers = ["127.0.0.1:9092", "127.0.0.1:9093"]
 topic = "topic02"
