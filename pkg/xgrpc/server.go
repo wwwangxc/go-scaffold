@@ -43,8 +43,13 @@ func (t *GrpcServer) Serve() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	s := <-quit
-	log.Info("Server exiting...")
+	// <-quit
+	log.Info("Shutdown Server ...")
 	t.conf.register.UnRegistryService(serviceKey)
+	log.Info("Server exited...")
+	fmt.Printf("\x1b[32m%s\x1b[0m", `
+bye :)
+`)
 	if i, ok := s.(syscall.Signal); ok {
 		os.Exit(int(i))
 	} else {
