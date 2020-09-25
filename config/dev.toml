@@ -73,21 +73,23 @@ address = "scaffold:///ping"    # 兼容ping契约的grpc服务地址
 balancer_name = "round_robin"   # 负载均衡算法
 dial_timeout = "5s"             # 拨号超时（单位：秒）
 
-# kafka producer 相关配置信息
+# kafka 生产者相关配置信息
 [app.kafka.topic01.producer]
-broker_address = ["127.0.0.1:9092", "127.0.0.1:9093"]
-topic = "topic01"
+version = "0.10.2.0"                                # kafka版本
+topic = "topic01"                                   # 主题
+brokers = ["127.0.0.1:9092", "127.0.0.1:9093"]      # kafka节点地址
 
-# kafka producer 相关配置信息
+# kafka 生产者相关配置信息
 [app.kafka.topic02.producer]
-broker_address = ["127.0.0.1:9092", "127.0.0.1:9093"]
-topic = "topic02"
+version = "0.10.2.0"                                # kafka版本
+topic = "topic02"                                   # 主题
+brokers = ["127.0.0.1:9092", "127.0.0.1:9093"]      # kafka节点地址
 
 # kafka 消费者组相关配置信息
 [app.kafka.consumerGroup]
-group_id = "groupID"                                # 消费者组ID
-balancer_name = "roundrobin"                        # 负载均衡算法
 version = "0.10.2.0"                                # kafka版本
+group_id = "groupID"                                # 消费者组ID
 topics = ["topic01", "topic02"]                     # 主题
 brokers = ["127.0.0.1:9092", "127.0.0.1:9093"]      # kafka节点地址
+balancer_name = "roundrobin"                        # 负载均衡算法
 consumer_num = 2                                    # 消费者组成员个数
