@@ -37,5 +37,8 @@ func (t *HTTPServer) ListenAndServe() {
 	if err := t.Shutdown(ctx); err != nil {
 		log.Fatal("Server Shutdown: ", zap.Error(err))
 	}
-	log.Info("Server exiting...")
+	log.Info("Server exited...")
+	fmt.Printf("\x1b[32m%s\x1b[0m", `
+bye :)
+`)
 }
