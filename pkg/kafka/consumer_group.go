@@ -11,7 +11,7 @@ import (
 
 type ConsumerGroup struct {
 	cg        sarama.ConsumerGroup
-	config    *ConsumerConfig
+	config    *ConsumerGroupConfig
 	ctx       context.Context
 	ctxCancel context.CancelFunc
 
@@ -21,7 +21,7 @@ type ConsumerGroup struct {
 	m sync.Mutex
 }
 
-func newConsumerGroup(conf *ConsumerConfig) (*ConsumerGroup, error) {
+func newConsumerGroup(conf *ConsumerGroupConfig) (*ConsumerGroup, error) {
 	c := sarama.NewConfig()
 	version, err := sarama.ParseKafkaVersion(conf.Version)
 	if err != nil {

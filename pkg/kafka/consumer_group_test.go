@@ -7,7 +7,7 @@ import (
 )
 
 func TestConsumer(t *testing.T) {
-	conf := &ConsumerConfig{
+	conf := &ConsumerGroupConfig{
 
 		GroupID:      "groupid",
 		BalancerName: "roundrobin",
