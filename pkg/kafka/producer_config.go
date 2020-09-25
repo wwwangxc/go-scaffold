@@ -21,11 +21,12 @@ func RawProducerConfig(confPrefix string, confHandler ConfigHandler) *ProducerCo
 	}
 }
 
-// Build2Async ..
+// Build2Async build async producer.
 func (t *ProducerConfig) Build2Async() (*AsyncProducer, error) {
 	return newAsyncProducer(t)
 }
 
-func (t *ProducerConfig) Build() (*SyncProducer, error) {
-	return newSyncProducer(t)
+// Build build sync producer.
+func (t *ProducerConfig) Build() (*Producer, error) {
+	return newProducer(t)
 }
