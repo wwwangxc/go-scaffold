@@ -40,7 +40,7 @@ func TestSyncProducer(t *testing.T) {
 		Brokers: []string{"127.0.0.1:9093"},
 		Version: "0.10.2.0",
 	}
-	p, err := conf.Build2Sync()
+	p, err := conf.Build()
 	if err != nil {
 		t.Log(err)
 		return
