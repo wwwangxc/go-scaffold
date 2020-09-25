@@ -20,8 +20,14 @@ func newServer(conf *Config) *HTTPServer {
 func newEngine(conf *Config) *gin.Engine {
 	gin.SetMode(conf.Mode)
 	engine := gin.New()
-	for _, fn := range conf.fns {
-		fn(engine)
+
+	for _, middleware := range conf.middlewares {
+		middleware(engine)
 	}
+
+	for _, route := range conf.routes {
+		route(engine)
+	}
+
 	return engine
 }

@@ -20,7 +20,8 @@ type Config struct {
 	Port        int
 	ShutdownTTL time.Duration
 
-	fns []func(*gin.Engine)
+	middlewares []func(*gin.Engine)
+	routes      []func(*gin.Engine)
 }
 
 // DefaultConfig ..
@@ -44,9 +45,15 @@ func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
 	}
 }
 
-// Setup ..
-func (t *Config) Setup(fns ...func(*gin.Engine)) *Config {
-	t.fns = fns
+// WithMiddlewares ..
+func (t *Config) WithMiddlewares(middlewares ...func(*gin.Engine)) *Config {
+	t.middlewares = middlewares
+	return t
+}
+
+// WithRoutes ..
+func (t *Config) WithRoutes(routes ...func(*gin.Engine)) *Config {
+	t.routes = routes
 	return t
 }
 
