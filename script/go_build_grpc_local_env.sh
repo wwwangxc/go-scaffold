@@ -32,7 +32,7 @@ if [ -f "${TARGET_DIR}/${CONF_NAME}" ]; then
 fi
 
 # main函数所在目录
-MAIN_DIR="${PROJ_DIR}/cmd/grpc"
+MAIN_DIR="${PROJ_DIR}/cmd/grpc_server"
 
 # 编译
 go build -o "${TARGET_DIR}/${APP_NAME}" "${MAIN_DIR}/main.go"
