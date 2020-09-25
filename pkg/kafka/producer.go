@@ -8,8 +8,7 @@ import (
 
 // Producer ..
 type AsyncProducer struct {
-	p sarama.AsyncProducer
-
+	p      sarama.AsyncProducer
 	config *ProducerConfig
 	rwmu   sync.RWMutex
 }
@@ -56,14 +55,14 @@ func (t *AsyncProducer) Close() {
 	t.p.AsyncClose()
 }
 
-// SyncProducer ..
-type SyncProducer struct {
+// Producer ..
+type Producer struct {
 	p      sarama.SyncProducer
 	config *ProducerConfig
 	rwmu   sync.RWMutex
 }
 
-func newSyncProducer(conf *ProducerConfig) (*SyncProducer, error) {
+func newProducer(conf *ProducerConfig) (*Producer, error) {
 	version, err := sarama.ParseKafkaVersion(conf.Version)
 	if err != nil {
 		return nil, err
@@ -77,14 +76,14 @@ func newSyncProducer(conf *ProducerConfig) (*SyncProducer, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &SyncProducer{
+	return &Producer{
 		p:      producer,
 		config: conf,
 	}, nil
 }
 
 // Send ..
-func (t *SyncProducer) Send(message string) error {
+func (t *Producer) Send(message string) error {
 	t.rwmu.RLock()
 	defer t.rwmu.RUnlock()
 	_, _, err := t.p.SendMessage(&sarama.ProducerMessage{
@@ -95,7 +94,7 @@ func (t *SyncProducer) Send(message string) error {
 }
 
 // Close ..
-func (t *SyncProducer) Close() {
+func (t *Producer) Close() {
 	t.rwmu.Lock()
 	defer t.rwmu.Unlock()
 	t.p.Close()

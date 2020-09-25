@@ -26,6 +26,6 @@ func (t *ProducerConfig) Build2Async() (*AsyncProducer, error) {
 	return newAsyncProducer(t)
 }
 
-func (t *ProducerConfig) Build2Sync() (*SyncProducer, error) {
+func (t *ProducerConfig) Build() (*SyncProducer, error) {
 	return newSyncProducer(t)
 }
