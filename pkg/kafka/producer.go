@@ -15,10 +15,15 @@ type AsyncProducer struct {
 }
 
 func newAsyncProducer(conf *ProducerConfig) (*AsyncProducer, error) {
-	producerConfig := sarama.NewConfig()
-	producerConfig.Producer.RequiredAcks = sarama.WaitForAll
-	producerConfig.Producer.Partitioner = sarama.NewRandomPartitioner
-	producer, err := sarama.NewAsyncProducer(conf.Brokers, producerConfig)
+	version, err := sarama.ParseKafkaVersion(conf.Version)
+	if err != nil {
+		return nil, err
+	}
+	c := sarama.NewConfig()
+	c.Version = version
+	c.Producer.RequiredAcks = sarama.WaitForAll
+	c.Producer.Partitioner = sarama.NewRandomPartitioner
+	producer, err := sarama.NewAsyncProducer(conf.Brokers, c)
 	if err != nil {
 		return nil, err
 	}
@@ -59,11 +64,16 @@ type SyncProducer struct {
 }
 
 func newSyncProducer(conf *ProducerConfig) (*SyncProducer, error) {
-	producerConfig := sarama.NewConfig()
-	producerConfig.Producer.RequiredAcks = sarama.WaitForAll
-	producerConfig.Producer.Partitioner = sarama.NewRandomPartitioner
-	producerConfig.Producer.Return.Successes = true
-	producer, err := sarama.NewSyncProducer(conf.Brokers, producerConfig)
+	version, err := sarama.ParseKafkaVersion(conf.Version)
+	if err != nil {
+		return nil, err
+	}
+	c := sarama.NewConfig()
+	c.Version = version
+	c.Producer.RequiredAcks = sarama.WaitForAll
+	c.Producer.Partitioner = sarama.NewRandomPartitioner
+	c.Producer.Return.Successes = true
+	producer, err := sarama.NewSyncProducer(conf.Brokers, c)
 	if err != nil {
 		return nil, err
 	}

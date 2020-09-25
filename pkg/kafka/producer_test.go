@@ -10,6 +10,7 @@ func TestAsyncProducer(t *testing.T) {
 	conf := &ProducerConfig{
 		Topic:   "app_test",
 		Brokers: []string{"127.0.0.1:9093"},
+		Version: "0.10.2.0",
 	}
 	p, err := conf.Build2Async()
 	if err != nil {
@@ -37,6 +38,7 @@ func TestSyncProducer(t *testing.T) {
 	conf := &ProducerConfig{
 		Topic:   "app_test",
 		Brokers: []string{"127.0.0.1:9093"},
+		Version: "0.10.2.0",
 	}
 	p, err := conf.Build2Sync()
 	if err != nil {

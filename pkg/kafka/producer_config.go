@@ -2,14 +2,9 @@ package kafka
 
 import "strings"
 
-// ConfigHandler ..
-type ConfigHandler interface {
-	GetString(key string) string
-	GetStringSlice(key string) []string
-}
-
 // ProducerConfig ..
 type ProducerConfig struct {
+	Version string
 	Topic   string
 	Brokers []string
 }
@@ -20,6 +15,7 @@ func RawProducerConfig(confPrefix string, confHandler ConfigHandler) *ProducerCo
 		confPrefix = confPrefix[:len(confPrefix)-1]
 	}
 	return &ProducerConfig{
+		Version: confHandler.GetString(confPrefix + ".version"),
 		Topic:   confHandler.GetString(confPrefix + ".topic"),
 		Brokers: confHandler.GetStringSlice(confPrefix + ".brokers"),
 	}
