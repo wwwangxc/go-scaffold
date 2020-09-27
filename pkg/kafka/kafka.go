@@ -22,6 +22,10 @@ var (
 	ConsumerErrClosed = errors.New("[kafka] the consumer is closed")
 )
 
+var (
+	ProducerErrClosed = errors.New("[kafka] the producer is closed")
+)
+
 type (
 	// ConsumerGroupHandlerSetup is run at the beginning of a new session, before ConsumeClaim.
 	ConsumerGroupHandlerSetup func(sarama.ConsumerGroupSession)
@@ -42,4 +46,9 @@ type (
 
 	// ConsumerHandlerSuccess triggered every time when a success message is received.
 	ConsumerHandlerSuccess func(*sarama.ConsumerMessage)
+)
+
+type (
+	// ProducerHandlerError triggered every time when a error message is reveived.
+	ProducerHandlerError func(*sarama.ProducerError)
 )

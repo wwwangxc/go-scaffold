@@ -8,11 +8,17 @@ import (
 
 // Producer ..
 type AsyncProducer struct {
-	p      sarama.AsyncProducer
 	config *ProducerConfig
-	rwmu   sync.RWMutex
+	p      sarama.AsyncProducer
+
+	closed bool
+
+	rwmu sync.RWMutex
 }
 
+// create async producer instance.
+// create a new goroutine for watch the prodcer.Errors channel and
+// triggered CallbackError handle every time when a error message is received.
 func newAsyncProducer(conf *ProducerConfig) (*AsyncProducer, error) {
 	version, err := sarama.ParseKafkaVersion(conf.Version)
 	if err != nil {
@@ -26,42 +32,67 @@ func newAsyncProducer(conf *ProducerConfig) (*AsyncProducer, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	go func() {
+		for {
+			err, ok := <-producer.Errors()
+			if !ok {
+				return
+			}
+			if conf.CallbackError != nil {
+				conf.CallbackError(err)
+			}
+		}
+	}()
+
 	return &AsyncProducer{
 		config: conf,
 		p:      producer,
+		closed: false,
 	}, nil
 }
 
-// Send ..
-func (t *AsyncProducer) Send(message string, callBack func(err error)) {
+// Send message to topic.
+// return ProducerErrClosed when the producer is closed.
+func (t *AsyncProducer) Send(message string) error {
 	t.rwmu.RLock()
 	defer t.rwmu.RUnlock()
+	if t.closed {
+		return ProducerErrClosed
+	}
 	t.p.Input() <- &sarama.ProducerMessage{
 		Topic: t.config.Topic,
 		Value: sarama.StringEncoder(message),
 	}
-	go func() {
-		err := <-t.p.Errors()
-		if callBack != nil {
-			callBack(err)
-		}
-	}()
+	return nil
 }
 
-// Close ..
-func (t *AsyncProducer) Close() {
+// Close async producer.
+func (t *AsyncProducer) Close() error {
 	t.rwmu.Lock()
 	defer t.rwmu.Unlock()
-	t.p.AsyncClose()
+	if t.closed {
+		return nil
+	}
+	err := t.p.Close()
+	if err != nil {
+		return err
+	}
+	t.closed = true
+	return nil
 }
 
 // Producer ..
 type Producer struct {
-	p      sarama.SyncProducer
 	config *ProducerConfig
-	rwmu   sync.RWMutex
+	p      sarama.SyncProducer
+
+	closed bool
+
+	rwmu sync.RWMutex
 }
 
+// create sync producer instance.
 func newProducer(conf *ProducerConfig) (*Producer, error) {
 	version, err := sarama.ParseKafkaVersion(conf.Version)
 	if err != nil {
@@ -79,13 +110,18 @@ func newProducer(conf *ProducerConfig) (*Producer, error) {
 	return &Producer{
 		p:      producer,
 		config: conf,
+		closed: false,
 	}, nil
 }
 
-// Send ..
+// Send message to topic.
+// return ProducerErrClosed when the producer is closed.
 func (t *Producer) Send(message string) error {
 	t.rwmu.RLock()
 	defer t.rwmu.RUnlock()
+	if t.closed {
+		return ProducerErrClosed
+	}
 	_, _, err := t.p.SendMessage(&sarama.ProducerMessage{
 		Topic: t.config.Topic,
 		Value: sarama.StringEncoder(message),
@@ -93,9 +129,17 @@ func (t *Producer) Send(message string) error {
 	return err
 }
 
-// Close ..
-func (t *Producer) Close() {
+// Close producer.
+func (t *Producer) Close() error {
 	t.rwmu.Lock()
 	defer t.rwmu.Unlock()
-	t.p.Close()
+	if t.closed {
+		return nil
+	}
+	err := t.p.Close()
+	if err != nil {
+		return err
+	}
+	t.closed = true
+	return nil
 }

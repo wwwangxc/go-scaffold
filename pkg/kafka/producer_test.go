@@ -4,6 +4,8 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/Shopify/sarama"
 )
 
 func TestAsyncProducer(t *testing.T) {
@@ -12,25 +14,32 @@ func TestAsyncProducer(t *testing.T) {
 		Brokers: []string{"127.0.0.1:9093"},
 		Version: "0.10.2.0",
 	}
-	p, err := conf.Build2Async()
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	p, err := conf.WithCallbackError(func(s *sarama.ProducerError) {
+		t.Log(s.Err)
+		wg.Done()
+	}).Build2Async()
 	if err != nil {
 		t.Log(err)
 		return
 	}
 	defer p.Close()
-	var wg sync.WaitGroup
-	wg.Add(1)
 
-	p.Send("Hello Kafka!!!", func(err error) {
+	err = p.Send("Hello Kafka!!!")
+	if err != nil {
 		t.Log(err)
-		wg.Done()
-	})
-	ticker := time.NewTicker(1 * time.Second)
+		return
+	}
+
 	go func() {
-		<-ticker.C
+		<-time.Tick(time.Second)
 		t.Log("Success")
 		wg.Done()
 	}()
+
 	wg.Wait()
 }
 
