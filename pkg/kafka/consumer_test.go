@@ -64,7 +64,12 @@ func TestConsumer(t *testing.T) {
 	})
 
 	c, err := conf.Build()
-	defer c.Close()
+	defer func() {
+		err := c.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
+	}()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -108,7 +113,12 @@ func TestAsyncConsumer(t *testing.T) {
 	})
 
 	c, err := conf.Build()
-	defer c.Close()
+	defer func() {
+		err := c.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
+	}()
 	if err != nil {
 		fmt.Println(err)
 		return
