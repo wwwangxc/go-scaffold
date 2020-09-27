@@ -53,7 +53,7 @@ func newAsyncProducer(conf *ProducerConfig) (*AsyncProducer, error) {
 }
 
 // Send message to topic.
-// return ProducerErrClosed when the producer is closed.
+// return ProducerErrClosed error when the producer is closed.
 func (t *AsyncProducer) Send(message string) error {
 	t.rwmu.RLock()
 	defer t.rwmu.RUnlock()
@@ -115,7 +115,7 @@ func newProducer(conf *ProducerConfig) (*Producer, error) {
 }
 
 // Send message to topic.
-// return ProducerErrClosed when the producer is closed.
+// return ProducerErrClosed error when the producer is closed.
 func (t *Producer) Send(message string) error {
 	t.rwmu.RLock()
 	defer t.rwmu.RUnlock()

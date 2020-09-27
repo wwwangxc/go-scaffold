@@ -56,7 +56,7 @@ func newConsumerGroup(conf *ConsumerGroupConfig) (*ConsumerGroup, error) {
 }
 
 // Watch the topics.
-// return ConsumerGroupErrClosed error when consumer group closed.
+// return ConsumerGroupErrClosed error when the consumer group is closed.
 // run CallbackError handle at the occurs of an error, when consume joins a cluster of consumers for a given list of topics.
 func (t *ConsumerGroup) Watch() error {
 	t.m.Lock()
@@ -191,7 +191,7 @@ func newConsumer(conf *ConsumerConfig) (*Consumer, error) {
 }
 
 // Watch sync watch the topic.
-// return ConsumerErrClosed err when consumer closed.
+// return ConsumerErrClosed error when the consumer is closed.
 // triggered CallbackError handle every time when a error message is received.
 func (t *Consumer) Watch() (<-chan *sarama.ConsumerMessage, error) {
 	t.m.Lock()
@@ -225,7 +225,7 @@ func (t *Consumer) Watch() (<-chan *sarama.ConsumerMessage, error) {
 }
 
 // AsyncWatch async watch the topic.
-// return ConsumerErrClosed err when consumer closed.
+// return ConsumerErrClosed error when the consumer is closed.
 // triggered CallbackError handle every time when a error message is received.
 // triggered CallbackSuccess handle every time when a success message is received.
 func (t *Consumer) AsyncWatch() error {
