@@ -1,11 +1,15 @@
 package kafka
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/Shopify/sarama"
+)
 
 type (
-	SetupHandler        func() error
-	ConsumeClaimHandler func() error
-	Cleanuphandler      func() error
+	SetupHandler        func(sarama.ConsumerGroupSession) error
+	ConsumeClaimHandler func(sarama.ConsumerGroupSession, sarama.ConsumerGroupClaim) error
+	CleanupHandler      func(sarama.ConsumerGroupSession) error
 )
 
 // ProducerConfig ..
@@ -19,9 +23,9 @@ type ConsumerGroupConfig struct {
 
 	L LoggerHandler
 
-	SetupCallBack        SetupHandler
-	ConsumeClaimCallBack ConsumeClaimHandler
-	CleanupCallBack      Cleanuphandler
+	CallBackSetup        SetupHandler
+	CallBackConsumeClaim ConsumeClaimHandler
+	CallBackCleanup      CleanupHandler
 }
 
 // RawConsumerConfig ..
@@ -41,19 +45,19 @@ func RawConsumerGroupConfig(confPrefix string, confHandler ConfigHandler) *Consu
 
 // WithSetup set setup callback.
 func (t *ConsumerGroupConfig) WithSetup(handler SetupHandler) *ConsumerGroupConfig {
-	t.SetupCallBack = handler
+	t.CallBackSetup = handler
 	return t
 }
 
 // WithSetup set consume claim callback.
 func (t *ConsumerGroupConfig) WithConsumeClaim(handler ConsumeClaimHandler) *ConsumerGroupConfig {
-	t.ConsumeClaimCallBack = handler
+	t.CallBackConsumeClaim = handler
 	return t
 }
 
 // WithSetup set cleanup callback.
-func (t *ConsumerGroupConfig) WithCleanup(handler Cleanuphandler) *ConsumerGroupConfig {
-	t.CleanupCallBack = handler
+func (t *ConsumerGroupConfig) WithCleanup(handler CleanupHandler) *ConsumerGroupConfig {
+	t.CallBackCleanup = handler
 	return t
 }
 
@@ -63,7 +67,7 @@ func (t *ConsumerGroupConfig) WithLogger(handler LoggerHandler) *ConsumerGroupCo
 	return t
 }
 
-// BuildGroup build consumer group.
+// Build build consumer group.
 func (t *ConsumerGroupConfig) Build() (*ConsumerGroup, error) {
 	return newConsumerGroup(t)
 }

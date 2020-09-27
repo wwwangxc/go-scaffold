@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 	"time"
+
+	"github.com/Shopify/sarama"
 )
 
 func TestConsumer(t *testing.T) {
@@ -17,15 +19,15 @@ func TestConsumer(t *testing.T) {
 		Version:      "0.10.2.0",
 	}
 
-	conf.WithSetup(func() error {
+	conf.WithSetup(func(session sarama.ConsumerGroupSession) error {
 		fmt.Println("setup...")
 		return nil
 	})
-	conf.WithConsumeClaim(func() error {
+	conf.WithConsumeClaim(func(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 		fmt.Println("consume claim...")
 		return nil
 	})
-	conf.WithCleanup(func() error {
+	conf.WithCleanup(func(session sarama.ConsumerGroupSession) error {
 		fmt.Println("cleanup...")
 		return nil
 	})

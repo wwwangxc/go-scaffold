@@ -3,12 +3,12 @@ package kafka
 import (
 	"context"
 	"errors"
-	"fmt"
 	"sync"
 
 	"github.com/Shopify/sarama"
 )
 
+// ConsumerGroup
 type ConsumerGroup struct {
 	cg        sarama.ConsumerGroup
 	config    *ConsumerGroupConfig
@@ -57,7 +57,7 @@ func newConsumerGroup(conf *ConsumerGroupConfig) (*ConsumerGroup, error) {
 // Watch ..
 func (t *ConsumerGroup) Watch() error {
 	if t.closed {
-		return errors.New("the consumer group is closed.")
+		return errors.New("the consumer group is closed")
 	}
 
 	t.m.Lock()
@@ -70,9 +70,9 @@ func (t *ConsumerGroup) Watch() error {
 		go func(group *ConsumerGroup) {
 			handler := &consumer{
 				l:                    group.config.L,
-				setupCallBack:        group.config.SetupCallBack,
-				consumeClaimCallBack: group.config.ConsumeClaimCallBack,
-				cleanupCallBack:      group.config.CleanupCallBack,
+				callBackSetup:        group.config.CallBackSetup,
+				callBackConsumeClaim: group.config.CallBackConsumeClaim,
+				callBackCleanup:      group.config.CallBackCleanup,
 			}
 			for {
 				if err := group.cg.Consume(group.ctx, group.config.Topics, handler); err != nil {
@@ -98,9 +98,7 @@ func (t *ConsumerGroup) Close() {
 	if t.closed {
 		return
 	}
-	fmt.Println("cg.close")
 	t.cg.Close()
-	fmt.Println("ctx.close")
 	t.ctxCancel()
 	t.closed = true
 }
@@ -108,16 +106,16 @@ func (t *ConsumerGroup) Close() {
 type consumer struct {
 	l LoggerHandler
 
-	setupCallBack        SetupHandler
-	consumeClaimCallBack ConsumeClaimHandler
-	cleanupCallBack      Cleanuphandler
+	callBackSetup        SetupHandler
+	callBackConsumeClaim ConsumeClaimHandler
+	callBackCleanup      CleanupHandler
 }
 
 // Setup ..
 func (t *consumer) Setup(sess sarama.ConsumerGroupSession) error {
 	var err error
-	if t.setupCallBack != nil {
-		err = t.setupCallBack()
+	if t.callBackSetup != nil {
+		err = t.callBackSetup(sess)
 	}
 	return err
 }
@@ -125,8 +123,8 @@ func (t *consumer) Setup(sess sarama.ConsumerGroupSession) error {
 // ConsumeClaim ..
 func (t *consumer) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for message := range claim.Messages() {
-		if t.consumeClaimCallBack != nil {
-			err := t.consumeClaimCallBack()
+		if t.callBackConsumeClaim != nil {
+			err := t.callBackConsumeClaim(sess, claim)
 			if err != nil && t.l != nil {
 				t.l.Error(err.Error())
 			}
@@ -139,8 +137,8 @@ func (t *consumer) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sarama.C
 // Cleanup ..
 func (t *consumer) Cleanup(sess sarama.ConsumerGroupSession) error {
 	var err error
-	if t.cleanupCallBack != nil {
-		err = t.cleanupCallBack()
+	if t.callBackCleanup != nil {
+		err = t.callBackCleanup(sess)
 	}
 	return err
 }
