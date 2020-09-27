@@ -93,3 +93,19 @@ topics = ["topic01", "topic02"]                     # 主题
 brokers = ["127.0.0.1:9092", "127.0.0.1:9093"]      # kafka节点地址
 balancer_name = "roundrobin"                        # 负载均衡算法
 consumer_num = 2                                    # 消费者组成员个数
+
+# kafka 消费者相关配置信息
+[app.kafka.topic01.consumer]
+version = "0.10.2.0"                                # kafka版本
+client_id = "clientID"                              # 消费者ID
+topic = "topic01"                                   # 主题
+partition = 0                                       # 分区
+brokers = ["127.0.0.1:9092", "127.0.0.1:9093"]      # kafka节点地址
+sasl_enable = false                                 # true：开启，false：关闭
+sasl_username = "username"
+sasl_password = "password"
+tls_enable = false                                  # true：开启，false：关闭
+tls_verify = false
+tls_cert_file = "cert file"
+tls_key_file = "key file"
+tls_ca_file = "ca file"
