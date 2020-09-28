@@ -10,5 +10,5 @@ import (
 
 func main() {
 	fmt.Printf("processID: %d\n", os.Getppid())
-	http.Run()
+	http.Serve()
 }
