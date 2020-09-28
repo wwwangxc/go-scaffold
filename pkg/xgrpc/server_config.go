@@ -53,13 +53,13 @@ type ServerConfig struct {
 	Scheme  string
 	Name    string
 
-	fns      []func(*grpc.Server)
+	services []func(*grpc.Server)
 	register Register
 }
 
-// Setup ..
-func (t *ServerConfig) Setup(fns ...func(*grpc.Server)) *ServerConfig {
-	t.fns = fns
+// WithService ..
+func (t *ServerConfig) WithService(services ...func(*grpc.Server)) *ServerConfig {
+	t.services = services
 	return t
 }
 

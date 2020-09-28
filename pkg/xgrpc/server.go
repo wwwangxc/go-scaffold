@@ -13,24 +13,29 @@ import (
 
 // GrpcServer ..
 type GrpcServer struct {
-	ln   net.Listener
-	srv  *grpc.Server
 	conf *ServerConfig
+
+	ln  net.Listener
+	srv *grpc.Server
+
+	closed bool
 }
 
+// create grpc server instance.
 func newServer(conf *ServerConfig) *GrpcServer {
 	ln, err := net.Listen(conf.Network, conf.Addr)
 	if err != nil {
 		panic(err.Error())
 	}
 	srv := grpc.NewServer()
-	for _, fn := range conf.fns {
-		fn(srv)
+	for _, service := range conf.services {
+		service(srv)
 	}
 	return &GrpcServer{
-		ln:   ln,
-		srv:  srv,
-		conf: conf,
+		ln:     ln,
+		srv:    srv,
+		conf:   conf,
+		closed: false,
 	}
 }
 
@@ -38,12 +43,15 @@ func newServer(conf *ServerConfig) *GrpcServer {
 func (t *GrpcServer) Serve() {
 	serviceKey := fmt.Sprintf("%s:///%s/%s", t.conf.Scheme, t.conf.Name, t.conf.Addr)
 	t.conf.register.RegistryService(serviceKey, t.conf.Addr)
-	go t.srv.Serve(t.ln)
+	go func() {
+		if err := t.srv.Serve(t.ln); err != nil {
+			panic(err)
+		}
+	}()
 	fmt.Printf("Listening and serving grpc on %s\n", t.conf.Addr)
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	s := <-quit
-	// <-quit
 	log.Info("Shutdown Server ...")
 	t.conf.register.UnRegistryService(serviceKey)
 	log.Info("Server exited...")
