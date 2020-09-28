@@ -1,8 +1,13 @@
 package constant
 
-// redis key constant
+// Redis key constant
 const (
-	redisKeyPrefix = "gateway:"
-
+	redisKeyPrefix  = "gateway:"
 	RedisKeySession = redisKeyPrefix + "session:"
+)
+
+// Redis store name constant
+const (
+	RedisStoreNameDB0 = "0"
+	RedisStoreNameDB1 = "1"
 )

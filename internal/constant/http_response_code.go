@@ -1,7 +1,7 @@
 package constant
 
 // HTTPResponseCode http response code
-type HTTPResponseCode uint
+type HTTPResponseCode uint16
 
 const (
 	// HTTPResponseCodeNotLogin 用户未登录
