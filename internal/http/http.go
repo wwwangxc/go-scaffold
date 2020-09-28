@@ -11,25 +11,35 @@ import (
 	"go-scaffold/pkg/xredis"
 )
 
-func Run() {
-	conf.Init()                                                                            // 加载配置文件
-	log.RawConfig("app.log", conf.GetHandler()).Init()                                     // 加载日志
-	defer log.Sync()                                                                       // 日志落盘
-	xgorm.RawConfig("app.mysql.db1", conf.GetHandler()).Append(constant.MySQLStoreNameDB1) // 加载gorm
-	xgorm.RawConfig("app.mysql.db2", conf.GetHandler()).Append(constant.MySQLStoreNameDB2) // 加载gorm
+// Serve ..
+func Serve() {
+	// 加载配置文件
+	conf.Init()
+
+	// 加载日志
+	log.RawConfig("app.log", conf.GetHandler()).Init()
+	defer log.Sync()
+
+	// 加载mysql
+	xgorm.RawConfig("app.mysql.db1", conf.GetHandler()).Append(constant.MySQLStoreNameDB1)
+	xgorm.RawConfig("app.mysql.db2", conf.GetHandler()).Append(constant.MySQLStoreNameDB2)
 	defer xgorm.CloseAll()
-	xredis.RawConfig("app.redis.0", conf.GetHandler()).Append(constant.RedisStoreNameDB0) // 加载Redis 0
-	xredis.RawConfig("app.redis.1", conf.GetHandler()).Append(constant.RedisStoreNameDB1) // 加载Redis 1
+
+	// 加载redis
+	xredis.RawConfig("app.redis.0", conf.GetHandler()).Append(constant.RedisStoreNameDB0)
+	xredis.RawConfig("app.redis.1", conf.GetHandler()).Append(constant.RedisStoreNameDB1)
 	defer xredis.CloseAll()
+
+	// http服务
 	xgin.RawConfig("app.http", conf.GetHandler()).
 		WithMiddlewares(
-			middleware.Logger,
-			middleware.Recovery,
-			middleware.Authentication,
-			middleware.Swagger,
+			middleware.Logger,         // 日志
+			middleware.Recovery,       // 错误恢复
+			middleware.Authentication, // 鉴权
+			middleware.Swagger,        // swagger
 		).
 		WithRoutes(
-			handler.RoutePing,
-			handler.RouteAuthentication,
+			handler.RoutePing,           // ping
+			handler.RouteAuthentication, // 鉴权接口
 		).Build().ListenAndServe()
 }
