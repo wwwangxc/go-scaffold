@@ -109,3 +109,6 @@ tls_verify = false
 tls_cert_file = "cert file"
 tls_key_file = "key file"
 tls_ca_file = "ca file"
+
+[app.sqlite]
+dsn = "./test.db"
