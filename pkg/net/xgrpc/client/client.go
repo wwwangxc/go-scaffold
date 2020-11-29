@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/resolver"
 )
 
-func newClient(conf *ClientConfig) (*grpc.ClientConn, error) {
+func newClient(conf *Config) (*grpc.ClientConn, error) {
 	if conf.resolver != nil {
 		resolver.Register(conf.resolver)
 	}
