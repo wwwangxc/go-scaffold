@@ -19,13 +19,13 @@ import (
 func Login(ctx *gin.Context) {
 	arg := &dto.Login{}
 	if err := ctx.ShouldBindJSON(arg); err != nil {
-		ResponseError(ctx, err)
+		ResponseError(ctx, ErrInvalidParams.New(err.Error()))
 		return
 	}
 	sessionID, err := service.Authentication.Login(
 		arg.Username, arg.Password)
 	if err != nil {
-		ResponseError(ctx, err)
+		ResponseError(ctx, ErrInvalidParams.New(err.Error()))
 		return
 	}
 	http.SetCookie(ctx.Writer, &http.Cookie{

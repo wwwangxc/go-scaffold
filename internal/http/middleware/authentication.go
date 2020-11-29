@@ -30,7 +30,7 @@ func authentication(args ...string) gin.HandlerFunc {
 		}
 		sessionID, err := ctx.Cookie(issuer)
 		if err != nil || len(sessionID) == 0 {
-			handler.ResponseWithCode(ctx, constant.HTTPResponseCodeNotLogin)
+			handler.ResponseError(ctx, handler.ErrPermissionDenied)
 			ctx.Abort()
 			return
 		}
@@ -38,14 +38,14 @@ func authentication(args ...string) gin.HandlerFunc {
 		tmp := xredis.Store(constant.RedisStoreNameDB0).HGetAll(constant.RedisKeySession + sessionID)
 		userID, ok := tmp["userID"]
 		if !ok {
-			handler.ResponseWithCode(ctx, constant.HTTPResponseCodeInvalidAuth)
+			handler.ResponseError(ctx, handler.ErrPermissionDenied)
 			ctx.Abort()
 			return
 		}
 
 		username, ok := tmp["username"]
 		if !ok {
-			handler.ResponseWithCode(ctx, constant.HTTPResponseCodeInvalidAuth)
+			handler.ResponseError(ctx, handler.ErrPermissionDenied)
 			ctx.Abort()
 			return
 		}

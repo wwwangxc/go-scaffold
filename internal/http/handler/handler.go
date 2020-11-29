@@ -1,16 +1,9 @@
 package handler
 
 import (
-	"go-scaffold/internal/constant"
 	"go-scaffold/internal/model"
 
-	"github.com/pkg/errors"
-
 	"github.com/gin-gonic/gin"
-)
-
-var (
-	ErrInvalidAuth = errors.New(constant.HTTPResponseCodeInvalidAuth.String())
 )
 
 // RoutePing ..
@@ -32,11 +25,11 @@ func RouteAuthentication(engine *gin.Engine) {
 func currentUser(ctx *gin.Context) (*model.Admin, error) {
 	v, ok := ctx.Get("current-user")
 	if !ok {
-		return nil, ErrInvalidAuth
+		return nil, ErrPermissionDenied
 	}
 	user, ok := v.(*model.Admin)
 	if !ok {
-		return nil, ErrInvalidAuth
+		return nil, ErrPermissionDenied
 	}
 	return user, nil
 }

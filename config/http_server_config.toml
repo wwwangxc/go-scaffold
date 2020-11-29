@@ -11,15 +11,15 @@ token_ttl = "15m"               # token有效时长（单位：分钟）
 name = "http"                   # 服务名称
 
 # mysql相关配置信息
-[app.mysql.db1]
-dsn = "root:root@tcp(127.0.0.1:3306)/db1?charset=utf8&parseTime=True&loc=Local"
+[app.mysql.master]
+dsn = "root:root@tcp(127.0.0.1:3306)/master?charset=utf8&parseTime=True&loc=Local"
 max_idle_conns = 50         # 最大空闲连接数
 max_open_conns = 100        # 最大活动连接数
 conn_max_lifetime = "300s"  # 连接的最大存活时间
 
 # mysql相关配置信息
-[app.mysql.db2]
-dsn = "root:root@tcp(127.0.0.1:3306)/db2?charset=utf8&parseTime=True&loc=Local"
+[app.mysql.slave]
+dsn = "root:root@tcp(127.0.0.1:3306)/slave?charset=utf8&parseTime=True&loc=Local"
 max_idle_conns = 50         # 最大空闲连接数
 max_open_conns = 100        # 最大活动连接数
 conn_max_lifetime = "300s"  # 连接的最大存活时间

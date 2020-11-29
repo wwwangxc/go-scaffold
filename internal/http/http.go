@@ -13,24 +13,24 @@ import (
 
 // Serve ..
 func Serve() {
-	// 加载配置文件
+	// config
 	config.Init()
 
-	// 加载日志
+	// log
 	log.RawConfig("app.log", config.GetHandler()).Init()
 	defer log.Sync()
 
-	// 加载mysql
-	xgorm.RawConfig("app.mysql.db1", config.GetHandler()).Append(constant.MySQLStoreNameDB1)
-	xgorm.RawConfig("app.mysql.db2", config.GetHandler()).Append(constant.MySQLStoreNameDB2)
+	// mysql
+	xgorm.RawConfig("app.mysql.master", config.GetHandler()).Append(constant.MySQLStoreNameMaster)
+	xgorm.RawConfig("app.mysql.slave", config.GetHandler()).Append(constant.MySQLStoreNameSlave)
 	defer xgorm.CloseAll()
 
-	// 加载redis
+	// redis
 	xredis.RawConfig("app.redis.0", config.GetHandler()).Append(constant.RedisStoreNameDB0)
 	xredis.RawConfig("app.redis.1", config.GetHandler()).Append(constant.RedisStoreNameDB1)
 	defer xredis.CloseAll()
 
-	// http服务
+	// http server
 	xgin.RawConfig("app.http", config.GetHandler()).
 		WithMiddlewares(
 			middleware.Logger,         // 日志

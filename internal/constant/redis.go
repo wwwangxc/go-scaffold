@@ -2,7 +2,7 @@ package constant
 
 // Redis key constant
 const (
-	redisKeyPrefix  = "gateway:"
+	redisKeyPrefix  = "scaffold:"
 	RedisKeySession = redisKeyPrefix + "session:"
 )
 

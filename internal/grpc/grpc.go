@@ -23,13 +23,13 @@ func Serve() {
 	log.RawConfig("app.log", config.GetHandler()).Init()
 	defer log.Sync()
 
-	// mysql1
-	xgorm.RawConfig("app.mysql.db1", config.GetHandler()).Append(constant.MySQLStoreNameDB1)
-	defer xgorm.Close(constant.MySQLStoreNameDB1)
+	// mysql master
+	xgorm.RawConfig("app.mysql.master", config.GetHandler()).Append(constant.MySQLStoreNameMaster)
+	defer xgorm.Close(constant.MySQLStoreNameMaster)
 
-	// mysql2
-	xgorm.RawConfig("app.mysql.db2", config.GetHandler()).Append(constant.MySQLStoreNameDB2)
-	defer xgorm.Close(constant.MySQLStoreNameDB2)
+	// mysql slave
+	xgorm.RawConfig("app.mysql.slave", config.GetHandler()).Append(constant.MySQLStoreNameSlave)
+	defer xgorm.Close(constant.MySQLStoreNameSlave)
 
 	// redis0
 	xredis.RawConfig("app.redis.0", config.GetHandler()).Append(constant.RedisStoreNameDB0)
