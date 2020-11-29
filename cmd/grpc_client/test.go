@@ -4,18 +4,18 @@ import (
 	"context"
 	"fmt"
 	"go-scaffold/internal/grpc/pb"
-	"go-scaffold/pkg/conf"
-	"go-scaffold/pkg/etcd"
-	"go-scaffold/pkg/xgrpc"
+	"go-scaffold/pkg/config"
+	"go-scaffold/pkg/etcd/resolver"
+	grpcClient "go-scaffold/pkg/net/xgrpc/client"
 )
 
 func main() {
-	conf.Init() // 加载配置文件
-	resolver, err := etcd.RawResolverConfig("grpc.resolver.etcd", conf.GetHandler()).Build()
+	config.Init() // 加载配置文件
+	resolver, err := resolver.RawConfig("grpc.resolver.etcd", config.GetHandler()).Build()
 	if err != nil {
 		panic(err)
 	}
-	conn, err := xgrpc.RawClientConfig("grpc.ping", conf.GetHandler()).WithResolver(resolver).Build()
+	conn, err := grpcClient.RawConfig("grpc.ping", config.GetHandler()).WithResolver(resolver).Build()
 	if err != nil {
 		panic(err)
 	}

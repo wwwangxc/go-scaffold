@@ -4,8 +4,8 @@ import (
 	"go-scaffold/internal/constant"
 	"go-scaffold/internal/http/handler"
 	"go-scaffold/internal/model"
-	"go-scaffold/pkg/conf"
-	"go-scaffold/pkg/xredis"
+	"go-scaffold/pkg/cache/xredis"
+	"go-scaffold/pkg/config"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +23,7 @@ func Authentication(engine *gin.Engine) {
 // Authentication 身份验证中间件
 func authentication(args ...string) gin.HandlerFunc {
 	ignoreFn := genIgnoreFunc(args...)
-	issuer := conf.GetString("app.http.name")
+	issuer := config.GetString("app.http.name")
 	return func(ctx *gin.Context) {
 		if ignoreFn(ctx.FullPath()) {
 			return

@@ -3,8 +3,8 @@ package service
 import (
 	"go-scaffold/internal/constant"
 	"go-scaffold/internal/model"
+	"go-scaffold/pkg/cache/xredis"
 	"go-scaffold/pkg/util"
-	"go-scaffold/pkg/xredis"
 	"time"
 
 	"github.com/pkg/errors"
