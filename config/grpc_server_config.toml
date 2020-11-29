@@ -4,7 +4,6 @@ machine_id = 1                  # 机器id
 # grpc服务相关配置信息
 [app.grpc]
 network = "tcp"                 # 服务网络协议
-addr = "127.0.0.1:3000"         # 服务地址
 scheme = "scaffold"             # 服务scheme
 name = "ping"                   # 服务名称
 

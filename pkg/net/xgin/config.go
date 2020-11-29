@@ -40,9 +40,14 @@ func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
 	}
 	return &Config{
 		Mode:        confHandler.GetString(confPrefix + ".mode"),
-		Port:        confHandler.GetInt(confPrefix + ".port"),
+		Port:        8080,
 		ShutdownTTL: confHandler.GetDuration(confPrefix + ".shutdown_ttl"),
 	}
+}
+
+func (t *Config) WithPort(port int) *Config {
+	t.Port = port
+	return t
 }
 
 // WithMiddlewares ..

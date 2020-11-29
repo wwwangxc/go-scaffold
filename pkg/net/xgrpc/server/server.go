@@ -13,7 +13,7 @@ import (
 
 // GrpcServer ..
 type GrpcServer struct {
-	conf *ServerConfig
+	conf *Config
 
 	ln  net.Listener
 	srv *grpc.Server
@@ -22,8 +22,8 @@ type GrpcServer struct {
 }
 
 // create grpc server instance.
-func newServer(conf *ServerConfig) *GrpcServer {
-	ln, err := net.Listen(conf.Network, conf.Addr)
+func newServer(conf *Config) *GrpcServer {
+	ln, err := net.Listen(conf.Network, fmt.Sprintf("127.0.0.1:%d", conf.Port))
 	if err != nil {
 		panic(err.Error())
 	}
@@ -41,14 +41,14 @@ func newServer(conf *ServerConfig) *GrpcServer {
 
 // Serve ..
 func (t *GrpcServer) Serve() {
-	serviceKey := fmt.Sprintf("%s:///%s/%s", t.conf.Scheme, t.conf.Name, t.conf.Addr)
-	t.conf.register.RegistryService(serviceKey, t.conf.Addr)
+	serviceKey := fmt.Sprintf("%s:///%s/%s", t.conf.Scheme, t.conf.Name, t.ln.Addr().String())
+	t.conf.register.RegistryService(serviceKey, t.ln.Addr().String())
 	go func() {
 		if err := t.srv.Serve(t.ln); err != nil {
 			panic(err)
 		}
 	}()
-	fmt.Printf("Listening and serving grpc on %s\n", t.conf.Addr)
+	fmt.Printf("Listening and serving grpc on %s\n", t.ln.Addr().String())
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	s := <-quit

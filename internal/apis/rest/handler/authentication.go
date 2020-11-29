@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"go-scaffold/internal/http/dto"
+	"go-scaffold/internal/apis/rest/dto"
 	"go-scaffold/internal/service"
 	"go-scaffold/pkg/config"
 	"net/http"

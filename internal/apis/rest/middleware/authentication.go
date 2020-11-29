@@ -1,8 +1,8 @@
 package middleware
 
 import (
+	"go-scaffold/internal/apis/rest/handler"
 	"go-scaffold/internal/constant"
-	"go-scaffold/internal/http/handler"
 	"go-scaffold/internal/model"
 	"go-scaffold/pkg/cache/xredis"
 	"go-scaffold/pkg/config"

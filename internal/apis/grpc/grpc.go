@@ -1,9 +1,9 @@
 package grpc
 
 import (
+	"go-scaffold/internal/apis/grpc/handler"
+	pingPB "go-scaffold/internal/apis/grpc/proto/ping"
 	"go-scaffold/internal/constant"
-	"go-scaffold/internal/grpc/handler"
-	"go-scaffold/internal/grpc/pb"
 	"go-scaffold/pkg/cache/xredis"
 	"go-scaffold/pkg/config"
 	"go-scaffold/pkg/database/xgorm"
@@ -15,7 +15,7 @@ import (
 )
 
 // Serve ..
-func Serve() {
+func Serve(port int) {
 	// config
 	config.Init()
 
@@ -42,9 +42,10 @@ func Serve() {
 	// grpc server
 	register := register.RawConfig("app.grpc.register.etcd", config.GetHandler()).Build()
 	srv := grpcServer.RawConfig("app.grpc", config.GetHandler()).
+		WithPort(port).
 		WithRegister(register).
 		WithService(func(server *grpc.Server) {
-			pb.RegisterPingServer(server, &handler.Ping{})
+			pingPB.RegisterPingServer(server, &handler.Ping{})
 		}).
 		Build()
 	defer srv.Close()

@@ -6,7 +6,7 @@
 PROJ_DIR=$(dirname $(dirname $0))
 
 # Protobuf目录
-PB_DIR="${PROJ_DIR}/internal/grpc/pb"
+PB_DIR="${PROJ_DIR}/internal/apis/grpc/proto"
 
 cd "${PBDIR}"
 

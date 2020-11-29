@@ -1,9 +1,9 @@
-package http
+package rest
 
 import (
+	"go-scaffold/internal/apis/rest/handler"
+	"go-scaffold/internal/apis/rest/middleware"
 	"go-scaffold/internal/constant"
-	"go-scaffold/internal/http/handler"
-	"go-scaffold/internal/http/middleware"
 	"go-scaffold/pkg/cache/xredis"
 	"go-scaffold/pkg/config"
 	"go-scaffold/pkg/database/xgorm"
@@ -12,7 +12,7 @@ import (
 )
 
 // Serve ..
-func Serve() {
+func Serve(port int) {
 	// config
 	config.Init()
 
@@ -32,6 +32,7 @@ func Serve() {
 
 	// http server
 	xgin.RawConfig("app.http", config.GetHandler()).
+		WithPort(port).
 		WithMiddlewares(
 			middleware.Logger,         // 日志
 			middleware.Recovery,       // 错误恢复

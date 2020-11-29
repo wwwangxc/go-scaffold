@@ -1,17 +1,17 @@
 #!/bin/bash
 
 # 以当前系统环境构建grpc应用程序
-# main函数目录： ./cmd/http/main.go
-# 目标文件夹：./target/http
+# main函数目录： ./cmd/main.go
+# 目标文件夹：./target/rest
 
 # 项目目录
 PROJ_DIR=$(dirname $(dirname $0))
 
 # 生成的目标目录
-TARGET_DIR=${PROJ_DIR}/target/http
+TARGET_DIR=${PROJ_DIR}/target/rest
 
 # 应用程序名称
-APP_NAME="http"
+APP_NAME="rest"
 
 # 配置文件名称
 CONF_NAME="config.toml"
@@ -32,7 +32,7 @@ if [ -f "${TARGET_DIR}/${CONF_NAME}" ]; then
 fi
 
 # main函数所在目录
-MAIN_DIR="${PROJ_DIR}/cmd/http"
+MAIN_DIR="${PROJ_DIR}/cmd"
 
 # 编译
 go build -o "${TARGET_DIR}/${APP_NAME}" "${MAIN_DIR}/main.go"

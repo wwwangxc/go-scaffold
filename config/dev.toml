@@ -4,7 +4,6 @@ machine_id = 1                  # 机器id
 # HTTP服务相关配置信息
 [app.http]
 mode = "debug"                  # 运行模式
-port = 8080                     # 端口
 shutdown_ttl = "5s"             # 关机等待时长
 secret = '盐'                   # 盐值
 token_ttl = "15m"               # token有效时长（单位：分钟）
@@ -13,7 +12,6 @@ name = "http"                   # 服务名称
 # grpc服务相关配置信息
 [app.grpc]
 network = "tcp"                 # 服务网络协议
-addr = "127.0.0.1:3000"         # 服务地址
 scheme = "scaffold"             # 服务scheme
 name = "ping"                   # 服务名称
 

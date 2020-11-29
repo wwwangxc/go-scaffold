@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 以当前系统环境构建grpc应用程序
-# main函数目录： ./cmd/grpc/main.go
+# main函数目录： ./cmd/main.go
 # 目标文件夹：./target/grpc
 
 # 项目目录
@@ -32,7 +32,7 @@ if [ -f "${TARGET_DIR}/${CONF_NAME}" ]; then
 fi
 
 # main函数所在目录
-MAIN_DIR="${PROJ_DIR}/cmd/grpc_server"
+MAIN_DIR="${PROJ_DIR}/cmd"
 
 # 编译
 go build -o "${TARGET_DIR}/${APP_NAME}" "${MAIN_DIR}/main.go"

@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	_ "go-scaffold/internal/http/swagger"
+	_ "go-scaffold/internal/apis/rest/swagger"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
