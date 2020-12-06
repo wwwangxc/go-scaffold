@@ -63,9 +63,3 @@ bye :)
 `)
 	t.srv.GracefulStop()
 }
-
-// Close ..
-func (t *GrpcServer) Close() {
-	defer t.ln.Close()
-	defer t.srv.GracefulStop()
-}

@@ -48,6 +48,5 @@ func Serve(port int) {
 			pingPB.RegisterPingServer(server, &handler.Ping{})
 		}).
 		Build()
-	defer srv.Close()
 	srv.Serve()
 }
