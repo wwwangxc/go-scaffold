@@ -3,9 +3,9 @@ package xgorm
 import (
 	"sync"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/pkg/errors"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var (
@@ -16,12 +16,12 @@ var (
 
 func init() {
 	store = &dbStore{
-		pool: make(map[string]*DB),
+		pool: make(map[string]*gorm.DB),
 	}
 }
 
 // Store ..
-func Store(storeName string) *DB {
+func Store(storeName string) *gorm.DB {
 	db, err := store.get(storeName)
 	if err != nil {
 		panic(err)
@@ -35,32 +35,18 @@ func Exist(storeName string) bool {
 	return err == nil
 }
 
-// Close ..
-func Close(storeName string) error {
-	return store.close(storeName)
-}
-
-// CloseAll ..
-func CloseAll() {
-	store.rw.Lock()
-	defer store.rw.Unlock()
-	for _, db := range store.pool {
-		db.Close()
-	}
-}
-
 type dbStore struct {
-	pool map[string]*DB
+	pool map[string]*gorm.DB
 	rw   sync.RWMutex
 }
 
-func (t *dbStore) append(storeName string, db *DB) {
+func (t *dbStore) append(storeName string, db *gorm.DB) {
 	t.rw.Lock()
 	defer t.rw.Unlock()
 	t.pool[storeName] = db
 }
 
-func (t *dbStore) get(storeName string) (*DB, error) {
+func (t *dbStore) get(storeName string) (*gorm.DB, error) {
 	if len(storeName) == 0 {
 		return nil, ErrStoreNotFound
 	}
@@ -73,59 +59,24 @@ func (t *dbStore) get(storeName string) (*DB, error) {
 	return v, nil
 }
 
-func (t *dbStore) close(storeName string) error {
-	db, err := t.get(storeName)
-	if err != nil {
-		return err
-	}
-	if db.Closed {
-		return nil
-	}
-	t.rw.Lock()
-	defer t.rw.Lock()
-	if db.Closed {
-		return nil
-	}
-	return db.Close()
-}
-
-// DB ..
-type DB struct {
-	*gorm.DB
-
-	Closed bool
-}
-
-func newDB(conf *Config) *DB {
-	client, err := gorm.Open("mysql", conf.DSN)
+func newDB(conf *Config) *gorm.DB {
+	c, err := gorm.Open(mysql.Open(conf.DSN), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
-	client.DB().SetMaxIdleConns(conf.MaxIdleConns)
-	client.DB().SetMaxOpenConns(conf.MaxOpenConns)
-	client.DB().SetConnMaxLifetime(conf.ConnMaxLifetime)
-	if err = client.DB().Ping(); err != nil {
+
+	db, err := c.DB()
+	if err != nil {
 		panic(err.Error())
 	}
-	return &DB{
-		Closed: false,
-		DB:     client,
-	}
-}
 
-// Close ..
-func (t *DB) Close() error {
-	if t.Closed {
-		return nil
+	db.SetMaxIdleConns(conf.MaxIdleConns)
+	db.SetMaxOpenConns(conf.MaxOpenConns)
+	db.SetConnMaxLifetime(conf.ConnMaxLifetime)
+
+	if err = db.Ping(); err != nil {
+		panic(err.Error())
 	}
-	t.Lock()
-	defer t.Unlock()
-	if t.Closed {
-		return nil
-	}
-	if err := t.DB.Close(); err != nil {
-		return err
-	}
-	t.Closed = true
-	return nil
+
+	return c
 }

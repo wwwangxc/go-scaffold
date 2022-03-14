@@ -28,9 +28,8 @@ type Config struct {
 
 // RawConsumerConfig ..
 func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
-	if strings.HasSuffix(confPrefix, ".") {
-		confPrefix = confPrefix[:len(confPrefix)-1]
-	}
+	confPrefix = strings.TrimSuffix(confPrefix, ".")
+
 	return &Config{
 		GroupID:      confHandler.GetString(confPrefix + ".group_id"),
 		BalancerName: confHandler.GetString(confPrefix + ".balancer_name"),

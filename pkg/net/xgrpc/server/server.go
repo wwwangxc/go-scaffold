@@ -56,7 +56,9 @@ func (t *GrpcServer) Serve() {
 	<-quit
 
 	log.Info("Shutdown Server ...")
-	t.conf.register.UnRegistryService(serviceKey)
+	if err := t.conf.register.UnRegistryService(serviceKey); err != nil {
+		log.Error(err.Error())
+	}
 	log.Info("Server exited...")
 	fmt.Printf("\x1b[32m%s\x1b[0m", `
 bye :)

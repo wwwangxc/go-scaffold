@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+	"fmt"
 	"go-scaffold/internal/constant"
 	"go-scaffold/internal/model"
 	"go-scaffold/pkg/cache/xredis"
@@ -20,14 +22,16 @@ var (
 type AuthenticationService struct{}
 
 // Login ..
-func (t *AuthenticationService) Login(username string, password string) (string, error) {
-	if len(username) == 0 || len(password) == 0 {
+func (t *AuthenticationService) Login(ctx context.Context, userName, password string) (string, error) {
+	if len(userName) == 0 || len(password) == 0 {
 		return "", ErrInvalidUsernameOrPassword
 	}
-	user := &model.Admin{}
-	if err := user.GetByUsername(username); err != nil {
-		return "", err
+
+	user, err := model.FindUserByUserName(ctx, userName)
+	if err != nil {
+		return "", fmt.Errorf("find user by user name fail. err:%w", err)
 	}
+
 	if user.Password != util.WithSecret(password, user.Salt) {
 		return "", ErrInvalidUsernameOrPassword
 	}
@@ -36,7 +40,7 @@ func (t *AuthenticationService) Login(username string, password string) (string,
 	sessionKey := constant.RedisKeySession + sessionID
 	fields := map[string]interface{}{
 		"userID":   user.ID,
-		"username": user.Username,
+		"username": user.UserName,
 	}
 	if !xredis.Store(constant.RedisStoreNameDB0).HMSet(sessionKey, fields, 15*time.Minute) {
 		return "", ErrAuthFailed

@@ -35,9 +35,8 @@ func DefaultConfig() *Config {
 
 // RawConfig ..
 func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
-	if strings.HasSuffix(confPrefix, ".") {
-		confPrefix = confPrefix[:len(confPrefix)-1]
-	}
+	confPrefix = strings.TrimSuffix(confPrefix, ".")
+
 	return &Config{
 		Mode:        confHandler.GetString(confPrefix + ".mode"),
 		Port:        8080,

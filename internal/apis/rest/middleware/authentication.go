@@ -50,10 +50,10 @@ func authentication(args ...string) gin.HandlerFunc {
 			return
 		}
 
-		var user model.Admin
-		id, _ := strconv.Atoi(userID.String())
-		user.ID = id
-		user.Username = username.String()
+		var user model.User
+		id, _ := strconv.ParseUint(userID.String(), 10, 64)
+		user.ID = uint(id)
+		user.UserName = username.String()
 
 		ctx.Set("currentUser", user)
 		ctx.Next()

@@ -23,9 +23,8 @@ type Config struct {
 
 // RawConfig ..
 func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
-	if strings.HasSuffix(confPrefix, ".") {
-		confPrefix = confPrefix[:len(confPrefix)-1]
-	}
+	confPrefix = strings.TrimSuffix(confPrefix, ".")
+
 	return &Config{
 		Endpoints:   confHandler.GetStringSlice(confPrefix + ".endpoints"),
 		DialTimeout: confHandler.GetDuration(confPrefix + ".dial_timeout"),

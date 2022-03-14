@@ -20,7 +20,6 @@ func TestStore(t *testing.T) {
 		DSN: "../../db/sqlite/test.db",
 	}
 	conf.Append("test")
-	defer Close("test")
 	if err := Store("test").Ping(); err != nil {
 		t.Log(err)
 		return

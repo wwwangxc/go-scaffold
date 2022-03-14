@@ -22,18 +22,21 @@ func Login(ctx *gin.Context) {
 		ResponseError(ctx, ErrInvalidParams.New(err.Error()))
 		return
 	}
-	sessionID, err := service.Authentication.Login(
+
+	sessionID, err := service.Authentication.Login(ctx.Request.Context(),
 		arg.Username, arg.Password)
 	if err != nil {
 		ResponseError(ctx, ErrInvalidParams.New(err.Error()))
 		return
 	}
+
 	http.SetCookie(ctx.Writer, &http.Cookie{
 		Name:     config.GetString("app.http.name"),
 		Value:    sessionID,
 		HttpOnly: true,
 		MaxAge:   15 * 60,
 	})
+
 	ResponseSuccess(ctx, nil)
 }
 

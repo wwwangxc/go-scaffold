@@ -34,9 +34,8 @@ type ConsumerConfig struct {
 
 // RawConsumerConfig ..
 func RawConsumerConfig(confPrefix string, confHandler ConfigHandler) *ConsumerConfig {
-	if strings.HasSuffix(confPrefix, ".") {
-		confPrefix = confPrefix[:len(confPrefix)-1]
-	}
+	confPrefix = strings.TrimSuffix(confPrefix, ".")
+
 	return &ConsumerConfig{
 		Version:   confHandler.GetString(confPrefix + ".version"),
 		ClientID:  confHandler.GetString(confPrefix + ".client_id"),

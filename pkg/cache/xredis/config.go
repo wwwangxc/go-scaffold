@@ -20,9 +20,8 @@ type Config struct {
 
 // RawConfig ..
 func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
-	if strings.HasSuffix(confPrefix, ".") {
-		confPrefix = confPrefix[:len(confPrefix)-1]
-	}
+	confPrefix = strings.TrimSuffix(confPrefix, ".")
+
 	return &Config{
 		Addr:       confHandler.GetString(confPrefix + ".addr"),
 		Password:   confHandler.GetString(confPrefix + ".password"),

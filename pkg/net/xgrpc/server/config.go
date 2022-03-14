@@ -17,7 +17,7 @@ type ConfigHandler interface {
 // Register ..
 type Register interface {
 	RegistryService(key, value string)
-	UnRegistryService(key string)
+	UnRegistryService(key string) error
 }
 
 // Config ..
@@ -43,9 +43,8 @@ func DefaultConfig() *Config {
 
 // RawConfig ..
 func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
-	if strings.HasSuffix(confPrefix, ".") {
-		confPrefix = confPrefix[:len(confPrefix)-1]
-	}
+	confPrefix = strings.TrimSuffix(confPrefix, ".")
+
 	return &Config{
 		Port:    3000,
 		Network: confHandler.GetString(confPrefix + ".network"),

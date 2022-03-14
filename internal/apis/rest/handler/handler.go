@@ -22,12 +22,12 @@ func RouteAuthentication(engine *gin.Engine) {
 	}
 }
 
-func currentUser(ctx *gin.Context) (*model.Admin, error) {
+func currentUser(ctx *gin.Context) (*model.User, error) {
 	v, ok := ctx.Get("current-user")
 	if !ok {
 		return nil, ErrPermissionDenied
 	}
-	user, ok := v.(*model.Admin)
+	user, ok := v.(*model.User)
 	if !ok {
 		return nil, ErrPermissionDenied
 	}

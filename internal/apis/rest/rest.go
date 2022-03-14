@@ -23,7 +23,6 @@ func Serve(port int) {
 	// mysql
 	xgorm.RawConfig("app.mysql.master", config.GetHandler()).Append(constant.MySQLStoreNameMaster)
 	xgorm.RawConfig("app.mysql.slave", config.GetHandler()).Append(constant.MySQLStoreNameSlave)
-	defer xgorm.CloseAll()
 
 	// redis
 	xredis.RawConfig("app.redis.0", config.GetHandler()).Append(constant.RedisStoreNameDB0)

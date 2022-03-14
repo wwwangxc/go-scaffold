@@ -3,6 +3,8 @@ package xgorm
 import (
 	"strings"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 // ConfigHandler ..
@@ -22,9 +24,8 @@ type Config struct {
 
 // RawConfig ..
 func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
-	if strings.HasSuffix(confPrefix, ".") {
-		confPrefix = confPrefix[:len(confPrefix)-1]
-	}
+	confPrefix = strings.TrimSuffix(confPrefix, ".")
+
 	return &Config{
 		DSN:             confHandler.GetString(confPrefix + ".dsn"),
 		MaxIdleConns:    confHandler.GetInt(confPrefix + ".max_idle_conns"),
@@ -34,12 +35,12 @@ func RawConfig(confPrefix string, confHandler ConfigHandler) *Config {
 }
 
 // Build ..
-func (t *Config) Build() *DB {
+func (t *Config) Build() *gorm.DB {
 	return newDB(t)
 }
 
 // Append append db to dbStore and return.
-func (t *Config) Append(storeName string) *DB {
+func (t *Config) Append(storeName string) *gorm.DB {
 	db := newDB(t)
 	store.append(storeName, db)
 	return db

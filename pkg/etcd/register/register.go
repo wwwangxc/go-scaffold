@@ -49,8 +49,9 @@ func (t *Register) RegistryService(key, value string) {
 }
 
 // UnRegistryService ..
-func (t *Register) UnRegistryService(key string) {
-	t.cli.Delete(context.Background(), key)
+func (t *Register) UnRegistryService(key string) error {
+	_, err := t.cli.Delete(context.Background(), key)
+	return err
 }
 
 func (t *Register) keepAlive(key, value string) error {

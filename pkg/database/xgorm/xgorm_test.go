@@ -12,8 +12,7 @@ func TestBuild(t *testing.T) {
 		MaxIdleConns:    50,
 		MaxOpenConns:    100,
 	}
-	cli := conf.Build()
-	defer cli.Close()
+	_ = conf.Build()
 }
 
 func TestAppend(t *testing.T) {
@@ -24,6 +23,4 @@ func TestAppend(t *testing.T) {
 		MaxOpenConns:    100,
 	}
 	conf.Append("test")
-	defer Store("test").Close()
-
 }
